@@ -21,7 +21,7 @@ if __name__ == '__main__':
     }
     crypt2post = get_md5(data2post)
     r = requests.post(
-        url='http://127.0.0.1:6666/balance', 
+        url='http://127.0.0.1:8101/balance', 
         data=json.dumps(data2post), 
         headers={'Authorization':''.join(crypt2post)}
     )
