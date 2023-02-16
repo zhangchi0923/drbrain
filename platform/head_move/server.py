@@ -14,6 +14,9 @@ import hashlib
 import pandas as pd
 from Pingpong import Pingpong
 from Balance import Balancer
+import warnings
+warnings.filterwarnings('ignore')
+
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -160,6 +163,9 @@ def pingpong():
         mkdir_new(write_pth + "/pp_result_fig")
         pp.traj_draw(data=raw_data)
         pp.rot_draw(data=raw_data)
+        vel_list = pp.calc_vel(raw_data)
+        with open(write_pth+'/vel.json', 'w') as f:
+            json.dump(vel_list, f)
 
         out_dict = {'code':200,
                     'msg':'Computation completed successfully.',
