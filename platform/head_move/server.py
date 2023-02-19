@@ -76,8 +76,8 @@ def balance():
 
         mkdir_new(out_path + '/result_fig')
         for n in [1, 2, 3]:
-            balancer.draw_sav(txt_head_data, mode, n, './src_fig/', out_path+'/result_fig/'+"traj_{}_{}.png".format(mode, n))
-            logger.info("traj_{}_{} completed.".format(mode, n))
+            balancer.draw_sav(txt_head_data, mode, n, './src_fig/', out_path+'/result_fig/'+"traj{}.png".format(n))
+            logger.info("traj{} completed.".format(n))
         vel_list = balancer.calc_vel(txt_head_data)
         with open(out_path+'/vel.json', 'w') as f:
             json.dump(vel_list, f)
