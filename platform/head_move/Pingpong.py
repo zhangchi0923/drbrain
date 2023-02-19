@@ -678,12 +678,13 @@ class Pingpong(object):
         pos_mat = np.array(data[['timestamp', 'handPosX', 'handPosY', 'handPosZ']])
         dlt_pos_mat = np.abs(np.diff(pos_mat, axis=0))
         shp = dlt_pos_mat.shape
-        new_dlt_pos_mat = dlt_pos_mat[shp[0] % 10 :].reshape((
-            shp[0] // 10, 10, shp[-1]
+        new_dlt_pos_mat = dlt_pos_mat[shp[0] % 70 :].reshape((
+            shp[0] // 70, 70, shp[-1]
         )).sum(axis=1)
         def div_by_time(x):
             return np.array([x[1]/x[0], x[2]/x[0], x[3]/x[0]])*10
         vel_mat = np.apply_along_axis(div_by_time, 1, new_dlt_pos_mat)
         vel_norm = LA.norm(vel_mat, ord=2, axis=1)
+        print(len(vel_norm))
 
         return list(vel_norm)
