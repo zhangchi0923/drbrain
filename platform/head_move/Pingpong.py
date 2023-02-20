@@ -685,6 +685,5 @@ class Pingpong(object):
             return np.array([x[1]/x[0], x[2]/x[0], x[3]/x[0]])*10
         vel_mat = np.apply_along_axis(div_by_time, 1, new_dlt_pos_mat)
         vel_norm = LA.norm(vel_mat, ord=2, axis=1)
-        print(len(vel_norm))
 
         return list(vel_norm)
