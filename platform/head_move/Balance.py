@@ -72,7 +72,7 @@ class Balancer(object):
                 r=10
                 x_offset, y_offset = 8, 2
             # plt.plot(0, 0, 'ro')
-            plt.plot(h_data['pos_x'], h_data['pos_z'], lw=0.2, alpha=0.5)
+            plt.plot(h_data['pos_x'], h_data['pos_z'], color='tomato', lw=0.2, alpha=1)
             new_vertices = np.concatenate((hull.vertices, [hull.vertices[0]]))
             plt.plot(points[new_vertices,0], points[new_vertices,1], 'blue', lw=0.5, alpha=0.4)
 
@@ -146,7 +146,7 @@ class Balancer(object):
                 x_offset, y_offset = 8, 0
             
             # plt.plot(0, 0, 'ro')
-            plt.plot(h_data['pos_y'], h_data['pos_z'], lw=0.2, alpha=0.6)
+            plt.plot(h_data['pos_y'], h_data['pos_z'], color='tomato', lw=0.2, alpha=1)
             new_vertices = np.concatenate((hull.vertices, [hull.vertices[0]]))
             plt.plot(points[new_vertices,0], points[new_vertices,1], 'blue', lw=0.5, alpha=0.4)
             plt.fill(points[hull.vertices, 0], points[hull.vertices, 1], color='grey', alpha=0.2)
@@ -206,7 +206,7 @@ class Balancer(object):
 
             plt.imshow(im_xz, extent=[-75, 75, -81, 69])
             # plt.plot(0, 0, 'ro')
-            plt.plot(h_data['pos_y'], h_data['pos_x'], lw=0.2, alpha=0.5)
+            plt.plot(h_data['pos_y'], h_data['pos_x'], color='tomato', lw=0.2, alpha=1)
             new_vertices = np.concatenate((hull.vertices, [hull.vertices[0]]))
             plt.plot(points[new_vertices,0], points[new_vertices,1], 'blue', lw=0.5, alpha=0.4)
 
