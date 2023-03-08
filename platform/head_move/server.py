@@ -207,12 +207,12 @@ def eye_screen():
             'msg':'Authorization failed.',
             'body':None
         })
-    gender = args.sex
-    age = args.age
-    education = args.education
-    url = args.url
-    src = args.backupResources
-    save_pth = args.saveResourcesPath
+    # gender = args.sex
+    # age = args.age
+    # education = args.education
+    url = args['url']
+    src = args['backupResources']
+    save_pth = args['saveResourcesPath']
 
     executer = ThreadPoolExecutor(2)
     executer.submit(draw_eye_screen, url, src, save_pth)
