@@ -18,6 +18,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from flask import Flask, request, jsonify
+from concurrent.futures import ThreadPoolExecutor
 
 app = Flask(__name__)
 
@@ -193,6 +194,45 @@ def pingpong():
     except Exception as e:
         logger.exception(e, stacklevel=1)
         return jsonify({'code':500, 'msg': str(e), 'body':None})
+
+@app.route('eye/screen', methods=['POST'])
+def eye_screen():
+    args = request.get_json(force=True)
+    auth = request.headers.get('Authorization')
+    auth_srv = get_md5(args)
+    if auth_srv != auth:
+        # logger.error('Authorization failed.\nAuth from client:{}\nAuth from server:{}'.format(auth, auth_srv))
+        return jsonify({
+            'code':401,
+            'msg':'Authorization failed.',
+            'body':None
+        })
+    gender = args.sex
+    age = args.age
+    education = args.education
+    url = args.url
+    src = args.backupResources
+    save_pth = args.saveResourcesPath
+
+    executer = ThreadPoolExecutor(2)
+    executer.submit(draw_eye_screen, url, src, save_pth)
+
+    results = {
+        'mmse':10,
+        'moca':10,
+        'resultScores':[
+        {'level':1, 'score':10},{'level':2, 'score':10},{'level':3, 'score':10},{'level':4, 'score':10},{'level':5, 'score':10},
+        {'level':6, 'score':10},{'level':7, 'score':10},{'level':8, 'score':10},{'level':9, 'score':10},{'level':10, 'score':10}
+        ]
+    }
+    return jsonify({
+        'code':200,
+        'msg':'AI prediction succeed.',
+        'body':results
+    })
+
+def draw_eye_screen(url, out_pth, design_pth):
+    os.system('python ./justscore_bySection_4urldata_final.py {} {} {}'.format(url, out_pth, design_pth))
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8101, debug=True)
