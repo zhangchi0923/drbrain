@@ -228,8 +228,6 @@ def main(url,outputPth,designPth):
 
 
     try:
-# url = 'https://cos.drbrain.net/profile/tj/2022/8/19/5bd2fb8c-b7d3-44bb-81af-43744fb5d354.txt'
-# outputPth = r"E:\spyder_projects\drbrain\my_code\gaze_preprocessing\figures\test"
         maker = 'origin'
 
         stateDict = {0:'读题',1:'预览图文',2:'答题'}                                # state of subject
@@ -419,6 +417,7 @@ def main(url,outputPth,designPth):
                 outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
                 fig_en.savefig(outfileName,dpi = 300)
                 plt.close()
+        logger.info('Plotting succeed.')
     except (SystemExit,KeyboardInterrupt):
         raise
     except Exception:

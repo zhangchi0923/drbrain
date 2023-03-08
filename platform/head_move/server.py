@@ -215,7 +215,7 @@ def eye_screen():
     save_pth = args['saveResourcesPath']
 
     executer = ThreadPoolExecutor(2)
-    executer.submit(draw_eye_screen, url, src, save_pth)
+    executer.submit(draw_eye_screen, url, save_pth, src)
 
     results = {
         'mmse':10,
