@@ -7,7 +7,7 @@ def get_md5(d):
     d = dict(sorted(d.items()))
     s=''
     for k, v in d.items():
-        s += k+v
+        s += str(k) + str(v)
     s = SALT + s
     md5 = hashlib.md5()
     md5.update(s.encode("utf-8"))
