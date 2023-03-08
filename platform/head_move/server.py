@@ -195,7 +195,7 @@ def pingpong():
         logger.exception(e, stacklevel=1)
         return jsonify({'code':500, 'msg': str(e), 'body':None})
 
-@app.route('eye/screen', methods=['POST'])
+@app.route('/eye/screen', methods=['POST'])
 def eye_screen():
     args = request.get_json(force=True)
     auth = request.headers.get('Authorization')
