@@ -238,7 +238,8 @@ def eye_screen():
         # logger.exception(e)
         return jsonify({
         'code':500,
-        'msg':'Error during score predicting.',
+        # 'msg':'Error during score predicting.',
+        'msg':e,
         'body':None
     })
         sys.exit()
