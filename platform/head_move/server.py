@@ -216,20 +216,32 @@ def eye_screen():
     src = args['backupResources']
     save_pth = args['saveResourcesPath']
 
+
     executer = ThreadPoolExecutor(2)
     executer.submit(draw_eye_screen, url, save_pth, src)
+    # logger.info('Draw task submitted successfully.')
 
     with requests.get(url) as r:
         if r.status_code != 200:
             # logger.error("Cannot access url data!")
             sys.exit()
         txt = r.text
-    es = EyeScreen(txt, gender, education, age)
-    data = es.preprocess_feat(es.text2DF())
-    moca, mmse = es.predict(data)
-    moca = 30 if moca > 28 else moca + 1 + 0.1*random.randint(0, 10)
-    mmse = 30 if mmse > 28 else mmse + 1 + 0.1*random.randint(0, 10)
-    cog_score = es.cog_score(data)
+    try:
+        es = EyeScreen(txt, gender, education, age)
+        data = es.preprocess_feat(es.text2DF())
+        moca, mmse = es.predict(data)
+        moca = 30 if moca > 28 else moca + 1 + 0.1*random.randint(0, 10)
+        mmse = 30 if mmse > 28 else mmse + 1 + 0.1*random.randint(0, 10)
+        cog_score = es.cog_score(data)
+    except Exception as e:
+        raise e
+        # logger.exception(e)
+        return jsonify({
+        'code':500,
+        'msg':'Error during score predicting.',
+        'body':None
+    })
+        sys.exit()
 
     results = {
         'mmse':round(moca, 1),

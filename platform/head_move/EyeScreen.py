@@ -25,7 +25,7 @@ class EyeScreen(object):
         self._gender = gender
         self._education = education
         self._age = age
-    
+
     def text2DF(self) -> pd.DataFrame:
         lines=self._s.split('\n')
         head=lines[0].split(',')
