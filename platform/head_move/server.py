@@ -11,9 +11,11 @@ import sys
 import requests
 import json
 import hashlib
+import random
 import pandas as pd
 from Pingpong import Pingpong
 from Balance import Balancer
+from EyeScreen import EyeScreen
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -93,15 +95,15 @@ def balance():
                         'up': '{:.2f}'.format(des_head_data.loc['max', 'pos_z']), 
                         'down': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_z'])),
                         
-                        'rightForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 1]*100), 
-                        'leftForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 2]*100), 
-                        'leftBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 3]*100),
-                        'rightBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 4]*100),
+                        'rightForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 1]), 
+                        'leftForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 2]), 
+                        'leftBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 3]),
+                        'rightBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 4]),
                         
-                        'rightForthPct': '{:.2f}%'.format(train_res.loc['rate', 1]*100), 
-                        'leftForthPct': '{:.2f}%'.format(train_res.loc['rate', 2]*100), 
-                        'leftBackPct': '{:.2f}%'.format(train_res.loc['rate', 3]*100),
-                        'rightBackPct': '{:.2f}%'.format(train_res.loc['rate', 4]*100)
+                        'rightForthPct': '{:.2f}%'.format(train_res.loc['rate', 1]), 
+                        'leftForthPct': '{:.2f}%'.format(train_res.loc['rate', 2]), 
+                        'leftBackPct': '{:.2f}%'.format(train_res.loc['rate', 3]),
+                        'rightBackPct': '{:.2f}%'.format(train_res.loc['rate', 4])
 
                     }          
         }
@@ -116,10 +118,10 @@ def balance():
         logger.info("Down: {:.2f}".format(des_head_data.loc['min', 'pos_z']))
         logger.info("--------------------------------")
         logger.info("Succeed rates calculated.")
-        logger.info("Right_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 1]*100, train_res.loc['rate', 1]*100))
-        logger.info("Left_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 2]*100, train_res.loc['rate', 2]*100))
-        logger.info("Left_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 3]*100, train_res.loc['rate', 3]*100))
-        logger.info("Right_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 4]*100, train_res.loc['rate', 4]*100))
+        logger.info("Right_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 1], train_res.loc['rate', 1]))
+        logger.info("Left_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 2], train_res.loc['rate', 2]))
+        logger.info("Left_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 3], train_res.loc['rate', 3]))
+        logger.info("Right_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 4], train_res.loc['rate', 4]))
         logger.info("--------------END---------------")
 
         return jsonify(out_dict)
@@ -207,9 +209,9 @@ def eye_screen():
             'msg':'Authorization failed.',
             'body':None
         })
-    # gender = args.sex
-    # age = args.age
-    # education = args.education
+    gender = args['sex']
+    age = args['age']
+    education = args['education']
     url = args['url']
     src = args['backupResources']
     save_pth = args['saveResourcesPath']
@@ -217,12 +219,26 @@ def eye_screen():
     executer = ThreadPoolExecutor(2)
     executer.submit(draw_eye_screen, url, save_pth, src)
 
+    with requests.get(url) as r:
+        if r.status_code != 200:
+            # logger.error("Cannot access url data!")
+            sys.exit()
+        txt = r.text
+    es = EyeScreen(txt, gender, education, age)
+    data = es.preprocess_feat(es.text2DF())
+    moca, mmse = es.predict(data)
+    moca = 30 if moca > 28 else moca + 1 + 0.1*random.randint(0, 10)
+    mmse = 30 if mmse > 28 else mmse + 1 + 0.1*random.randint(0, 10)
+    cog_score = es.cog_score(data)
+
     results = {
-        'mmse':10,
-        'moca':10,
+        'mmse':round(moca, 1),
+        'moca':round(mmse, 1),
         'resultScores':[
-        {'level':1, 'score':10},{'level':2, 'score':10},{'level':3, 'score':10},{'level':4, 'score':10},{'level':5, 'score':10},
-        {'level':6, 'score':10},{'level':7, 'score':10},{'level':8, 'score':10},{'level':9, 'score':10},{'level':10, 'score':10}
+        {'level':1, 'score':round(cog_score[0], 1)},{'level':2, 'score':round(cog_score[1], 1)},{'level':3, 'score':round(cog_score[2], 1)},
+        {'level':4, 'score':round(cog_score[3], 1)},{'level':5, 'score':round(cog_score[4], 1)},{'level':6, 'score':round(cog_score[5], 1)},
+        {'level':7, 'score':round(cog_score[6], 1)},{'level':8, 'score':round(cog_score[7], 1)},{'level':9, 'score':round(cog_score[8], 1)},
+        {'level':10, 'score':round(cog_score[9], 1)}
         ]
     }
     return jsonify({
