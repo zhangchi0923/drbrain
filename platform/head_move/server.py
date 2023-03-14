@@ -221,15 +221,12 @@ def eye_screen():
     executer.submit(draw_eye_screen, url, save_pth, src)
     # logger.info('Draw task submitted successfully.')
 
-    try:
-        with requests.get(url) as r:
-            if r.status_code != 200:
-                # logger.error("Cannot access url data!")
-                raise HTTPError(r.status_code, r.content)
-                sys.exit()
-            txt = r.text
-    except Exception as e:
-            raise e
+    
+    with requests.get(url) as r:
+        assert r.status_code == 200, 'HTTP Connection Error: {}, {}'.format(r.status_code, r.content)
+        # logger.error("Cannot access url data!")
+        txt = r.text
+    
     try:
         es = EyeScreen(txt, gender, education, age)
         data = es.preprocess_feat(es.text2DF())
