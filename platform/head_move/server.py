@@ -217,13 +217,10 @@ def eye_screen():
     save_pth = args['saveResourcesPath']
 
 
-    executer = ProcessPoolExecutor(2)
-    thread_draw = executer.submit(draw_eye_screen, url, save_pth, src)
-    # print('Plot process submitted.')
-    thread_calc = executer.submit(calc_eye_screen, url, gender, education, age)
-    # print('AI prediction thread submitted.')
-    wait([thread_calc], return_when=ALL_COMPLETED)
-    return jsonify(thread_calc.result())
+    executer = ProcessPoolExecutor(1)
+    executer.submit(draw_eye_screen, url, save_pth, src)
+    results = calc_eye_screen(url, gender, education, age)
+    return jsonify(results)
 
     
 def calc_eye_screen(url, gender, education, age):
