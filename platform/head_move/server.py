@@ -20,7 +20,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from flask import Flask, request, jsonify
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, wait, ALL_COMPLETED
+from concurrent.futures import ProcessPoolExecutor, wait, ALL_COMPLETED
 
 app = Flask(__name__)
 
@@ -217,7 +217,7 @@ def eye_screen():
     save_pth = args['saveResourcesPath']
 
 
-    executer = ThreadPoolExecutor(2)
+    executer = ProcessPoolExecutor(2)
     thread_draw = executer.submit(draw_eye_screen, url, save_pth, src)
     # print('Plot process submitted.')
     thread_calc = executer.submit(calc_eye_screen, url, gender, education, age)
