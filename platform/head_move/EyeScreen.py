@@ -69,10 +69,17 @@ class EyeScreen(object):
         return result
     
     def predict(self, df):
-        moca_model = joblib.load(MOCA_MODEL_PATH)
-        mmse_model = joblib.load(MMSE_MODEL_PATH)
-        moca = float(moca_model.predict(df)[0])
-        mmse = float(mmse_model.predict(df)[0])
+        cog_score = self.cog_score(df)
+        ovr_score = np.mean(cog_score)
+        if ovr_score < 30:
+            moca = 20 - (30 - ovr_score)*3/10
+        elif ovr_score < 50:
+            moca = 24 - (50 - ovr_score)*3/10
+        elif ovr_score < 70:
+            moca = 26 + (ovr_score - 50)/10
+        else:
+            moca = 30 - (100 - ovr_score)/10
+        mmse = min(30, moca + 2 + 0.1*random.randint(0, 10))
         return moca, mmse
     
     def cog_score(self, df) -> list:

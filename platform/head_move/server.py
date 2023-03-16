@@ -20,7 +20,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from flask import Flask, request, jsonify
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, wait, ALL_COMPLETED
 
 app = Flask(__name__)
 
@@ -217,12 +217,16 @@ def eye_screen():
     save_pth = args['saveResourcesPath']
 
 
-    executer = ProcessPoolExecutor(1)
-    executer.submit(draw_eye_screen, url, save_pth, src)
-    # logger.info('Draw task submitted successfully.')
-    print('Plot process submitted.')
+    executer = ThreadPoolExecutor(2)
+    thread_draw = executer.submit(draw_eye_screen, url, save_pth, src)
+    # print('Plot process submitted.')
+    thread_calc = executer.submit(calc_eye_screen, url, gender, education, age)
+    # print('AI prediction thread submitted.')
+    wait([thread_calc], return_when=ALL_COMPLETED)
+    return jsonify(thread_calc.result())
 
     
+def calc_eye_screen(url, gender, education, age):
     with requests.get(url) as r:
         assert r.status_code == 200, 'HTTP Connection Error: {}, {}'.format(r.status_code, r.content)
         # logger.error("Cannot access url data!")
@@ -232,23 +236,19 @@ def eye_screen():
         es = EyeScreen(txt, gender, education, age)
         data = es.preprocess_feat(es.text2DF())
         moca, mmse = es.predict(data)
-        moca = 30 if moca > 28 else moca + 1 + 0.1*random.randint(0, 10)
-        mmse = 30 if mmse > 28 else mmse + 1 + 0.1*random.randint(0, 10)
         cog_score = es.cog_score(data)
     except Exception as e:
-        raise e
         # logger.exception(e)
-        return jsonify({
+        return {
         'code':500,
         # 'msg':'Error during score predicting.',
         'msg':e,
         'body':None
-    })
-        sys.exit()
+    }
 
-    results = {
-        'mmse':round(moca, 1),
-        'moca':round(mmse, 1),
+    body = {
+        'mmse':round(mmse, 1),
+        'moca':round(moca, 1),
         'resultScores':[
         {'level':1, 'score':round(cog_score[0], 1)},{'level':2, 'score':round(cog_score[1], 1)},{'level':3, 'score':round(cog_score[2], 1)},
         {'level':4, 'score':round(cog_score[3], 1)},{'level':5, 'score':round(cog_score[4], 1)},{'level':6, 'score':round(cog_score[5], 1)},
@@ -256,11 +256,13 @@ def eye_screen():
         {'level':10, 'score':round(cog_score[9], 1)}
         ]
     }
-    return jsonify({
+
+    results = {
         'code':200,
         'msg':'AI prediction succeed.',
-        'body':results
-    })
+        'body':body
+    }
+    return results
 
 def draw_eye_screen(url, out_pth, design_pth):
     os.system('python ./justscore_bySection_4urldata_final.py {} {} {}'.format(url, out_pth, design_pth))
