@@ -11,11 +11,11 @@ import sys
 import requests
 import json
 import hashlib
-import random
 import pandas as pd
 from Pingpong import Pingpong
 from Balance import Balancer
 from EyeScreen import EyeScreen
+from Firefly import Firefly
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -232,16 +232,17 @@ def calc_eye_screen(url, gender, education, age):
     try:
         es = EyeScreen(txt, gender, education, age)
         data = es.preprocess_feat(es.text2DF())
+        print(data)
         moca, mmse = es.predict(data)
         cog_score = es.cog_score(data)
     except Exception as e:
         # logger.exception(e)
         return {
-        'code':500,
-        # 'msg':'Error during score predicting.',
-        'msg':e,
-        'body':None
-    }
+            'code':500,
+            # 'msg':'Error during score predicting.',
+            'msg':str(e),
+            'body':None
+        }
 
     body = {
         'mmse':round(mmse, 1),
@@ -263,6 +264,31 @@ def calc_eye_screen(url, gender, education, age):
 
 def draw_eye_screen(url, out_pth, design_pth):
     os.system('python ./justscore_bySection_4urldata_final.py {} {} {}'.format(url, out_pth, design_pth))
+
+# create app 'eye/train/firefly' with POST method. Related class was created in eye/train/Firefly.py
+@app.route('/eye/train/firefly', methods=['POST'])
+def firefly():
+    args = request.get_json(force=True)
+    auth = request.headers.get('Authorization')
+    auth_srv = get_md5(args)
+    if auth_srv != auth:
+        # logger.error('Authorization failed.\nAuth from client:{}\nAuth from server:{}'.format(auth, auth_srv))
+        return jsonify({
+            'code':401,
+            'msg':'Authorization failed.',
+            'body':None
+        })
+    url = args['url']
+    savePath = args['savePath']
+    df = pd.read_csv(url, index_col=0)
+    firefly = Firefly(df, savePath)
+    firefly.plot()
+    return jsonify({
+        'code':200,
+        'msg':'Firefly plot succeed.',
+        'body':None
+    })
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8101, debug=True)
