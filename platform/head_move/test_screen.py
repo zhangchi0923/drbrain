@@ -16,10 +16,11 @@ def get_md5(d):
 
 if __name__ == '__main__':
     data2post = {
-        "sex":  "男",
-        "age": 10,
-        "education": "本科",
-        "url": "https://cos.drbrain.net/profile/tj/2023/2/18/568c2380-30e0-4fcf-b165-a347e007606b.txt",
+        "sex":  "女",
+        "age": 63,
+        "education": "初中",
+        "url": "https://cos.drbrain.net/profile/tj/2023/4/3/20510024-d98f-4b48-aeb4-6e404459471a.txt",
+        # "url": "https://cos.drbrain.net/profile/tj/2023/4/9/3d560422-bf7b-483d-9283-87ad0115d992.txt",
         "backupResources": "/usr/local/project/algorithm/backup/utiles/design/",
         "saveResourcesPath": "/usr/local/project/eye_image/y0001"
     }

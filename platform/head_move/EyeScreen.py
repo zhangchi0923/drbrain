@@ -8,8 +8,8 @@ import numpy as np
 import eyeMovement
 from settings import *
 import itertools
-import joblib
 import random
+from sklearn.linear_model import LinearRegression
 
 class EyeScreen(object):
     base_cat = ['abs', 'calc4', 'calc5', 'calc6', 'exec', 'mem8', 'mem9', 'mem10', 'recall']
@@ -52,12 +52,22 @@ class EyeScreen(object):
     def preprocess_feat(self, df) -> pd.DataFrame:
         levels = list(range(3, 12, 1))
         x, y, time = self.get_lvl_state(df, 2, 2)
+
+        bez_x, bez_y = self.get_live_position(time/1000, time[0]/1000)
+        model_x, model_y = self.corrModel(x, y, bez_x, bez_y)
+        x = model_x.predict(x.reshape(-1, 1))
+        y = model_y.predict(y.reshape(-1, 1))
+
         detector_l2 = eyeMovement.EyeMovement(x, y, time, AOIs, BEZIER_POINTS)
         att = detector_l2.measureFollowRate()
         feats = [att]
         # other
         for level in levels:
             x, y, time = self.get_lvl_state(df, level, 2)
+            time = time.reshape(-1, 1)
+            x = model_x.predict(x.reshape(-1, 1))
+            y = model_y.predict(y.reshape(-1, 1))
+            x = x.flatten(); y = y.flatten(); time = time.flatten()
             detector = eyeMovement.EyeMovement(x, y, time, AOIs[level], BEZIER_POINTS)
             fix_data = detector.eye_movements_detector(x, y, time)
             _, _, merged = detector.merge_fixation(fix_data)
@@ -85,3 +95,32 @@ class EyeScreen(object):
     def cog_score(self, df) -> list:
         result = df.loc[:, self.cog_cat].values[0].tolist()
         return [x*100 if x > 0.05 else x*100 + 0.5*random.randint(0, 10) for x in result]
+
+    def bezier_order3(self, t, points):
+        p0 = points[0,:]
+        p1 = points[1,:]
+        p2 = points[2,:]
+        p3 = points[3,:]
+        y = (1-t)**3*p0+3*(1-t)**2*t*p1+3*(1-t)*t**2*p2+t**3*p3
+        return y
+
+    def get_live_position(self, trueTime, start_time):
+        bez_x = []
+        bez_y = []
+        allPoints = np.array(BEZIER_POINTS)
+        for time in trueTime:
+            rel_time = (time-start_time)/2.5 
+            i = int(rel_time)                                                          # for detecting current section in 4 bezier curves
+            t = rel_time-i                                                             # time parameter of bezier curves
+            k = i%4                                                                    # detect current section in 4 bezier curves
+            points = allPoints[4*k:4*k+4,:]
+            x, y = self.bezier_order3(t,points)
+            bez_x.append(x); bez_y.append(y)
+        return bez_x, bez_y
+
+    def corrModel(self, x, y, bez_x, bez_y):
+        model_x = LinearRegression()
+        model_y = LinearRegression()
+        model_x.fit(x.reshape(-1, 1), np.array(bez_x).reshape(-1, 1))
+        model_y.fit(y.reshape(-1, 1), np.array(bez_y).reshape(-1, 1))
+        return model_x, model_y

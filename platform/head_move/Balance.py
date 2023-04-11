@@ -1,3 +1,10 @@
+"""
+ author: zhangchi
+ email: zcsjtu0923@gmail.com
+ create date: 2023-03-13 11:27:43
+"""
+
+
 import datetime
 import logging
 import os
@@ -5,11 +12,12 @@ import matplotlib.pyplot as plt
 import math
 import matplotlib.patches as patches
 from matplotlib.patches import Wedge
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np
 import pandas as pd
 from scipy.spatial import ConvexHull
 from numpy import linalg as LA
-
 
 class Balancer(object):
 
@@ -57,17 +65,20 @@ class Balancer(object):
                 raise e
             
             if mode == 'stand':
-                plt.imshow(im_xz, extent=[-100, 100, -175, 25])
+                extent = [-100, 100, -175, 25]
+                plt.imshow(im_xz, extent=extent)
                 x_center, y_center = 0, -67
                 r=40
                 x_offset, y_offset = 27, 0
             elif mode == 'sit':
-                plt.imshow(im_xz, extent=[-60, 60, -100, 20])
+                extent = [-60, 60, -100, 20]
+                plt.imshow(im_xz, extent=extent)
                 x_center, y_center = 0, -35
                 r=20
                 x_offset, y_offset = 20, 0
             elif mode == 'head':
-                plt.imshow(im_xz, extent=[-30, 30, -47, 13])
+                extent=[-30, 30, -47, 13]
+                plt.imshow(im_xz, extent=extent)
                 x_center, y_center = 0, -15
                 r=10
                 x_offset, y_offset = 8, 2
@@ -118,8 +129,11 @@ class Balancer(object):
                     size=9,
                 )
             plt.axis('off')
+            plt.xlim(extent[0:2]); plt.ylim(extent[2:])
             plt.savefig(sav_path, dpi=400, bbox_inches='tight')
             plt.close()
+            return
+            
 
         def draw_2(mode):
             points = np.array(h_data[['pos_y', 'pos_z']])
@@ -130,17 +144,20 @@ class Balancer(object):
                 raise e
             
             if mode == 'stand':
-                plt.imshow(im_xz, extent=[-100, 100, -175, 25])
+                extent = [-100, 100, -175, 25]
+                plt.imshow(im_xz, extent=extent)
                 x_center, y_center = 0, -67
                 r=40
                 x_offset, y_offset = 27, 8
             elif mode == 'sit':
-                plt.imshow(im_xz, extent=[-60, 60, -100, 20])
+                extent = [-60, 60, -100, 20]
+                plt.imshow(im_xz, extent=extent)
                 x_center, y_center = 0, -35
                 r=20
                 x_offset, y_offset = 20, 8
             elif mode == 'head':
-                plt.imshow(im_xz, extent=[-30, 30, -47, 13])
+                extent = [-30, 30, -47, 13]
+                plt.imshow(im_xz, extent=extent)
                 x_center, y_center = 0, -15
                 r=10
                 x_offset, y_offset = 8, 0
@@ -188,6 +205,7 @@ class Balancer(object):
                     size=9,
                 )
             plt.axis('off')
+            plt.xlim(extent[0:2]); plt.ylim(extent[2:])
             plt.savefig(sav_path, dpi=400, bbox_inches='tight')
             plt.close()
             return
@@ -196,7 +214,6 @@ class Balancer(object):
             points = np.array(h_data[['pos_y', 'pos_x']])
             left_ang = h_data['angle_yaw'].max()
             right_ang = h_data['angle_yaw'].min()
-            # print(left_ang, right_ang)
             r=40
             hull = ConvexHull(points, incremental=True)
             try:
@@ -204,7 +221,8 @@ class Balancer(object):
             except Exception as e:
                 raise e
 
-            plt.imshow(im_xz, extent=[-75, 75, -81, 69])
+            extent = [-75, 75, -81, 69]
+            plt.imshow(im_xz, extent=extent)
             # plt.plot(0, 0, 'ro')
             plt.plot(h_data['pos_y'], h_data['pos_x'], color='tomato', lw=0.2, alpha=1)
             new_vertices = np.concatenate((hull.vertices, [hull.vertices[0]]))
@@ -244,6 +262,7 @@ class Balancer(object):
                     size=9,
                 )
             plt.axis('off')
+            plt.xlim(extent[0:2]); plt.ylim(extent[2:])
             plt.savefig(sav_path, dpi=400, bbox_inches='tight')
             plt.close()
             return

@@ -9,9 +9,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import matplotlib
+matplotlib.use('Agg')
 from sklearn import linear_model
 import requests
 myFont = fm.FontProperties(fname='C:\Windows\Fonts\simkai.ttf')
+import warnings
+warnings.filterwarnings('ignore')
+
 
 import logging
 import datetime
@@ -74,7 +79,7 @@ def extended_ROI(ROIs,percent = 0.1):
     return newROIs
 ROIs = extended_ROI(ROIs)
 
-def bezier_order3(t,points):
+def bezier_order3(t, points):
     p0 = points[0,:]
     p1 = points[1,:]
     p2 = points[2,:]
@@ -82,13 +87,23 @@ def bezier_order3(t,points):
     y = (1-t)**3*p0+3*(1-t)**2*t*p1+3*(1-t)*t**2*p2+t**3*p3
     return y
 
-def get_live_position(trueTime,start_time):                                                      
-    rel_time = (trueTime-start_time)/2.5                                       # time parameter of bezier curves
+def bezier_pts(start_time, end_time, interval):
+    time = np.linspace(start_time/1000, end_time/1000, interval)
+    bez_x = []; bez_y = []
+    s_time = time[0]
+    for t in time:
+        x, y = get_live_position(t, s_time)
+        bez_x.append(x); bez_y.append(y)
+    return bez_x, bez_y
+
+
+def get_live_position(trueTime, start_time):                                                      
+    rel_time = (trueTime - start_time)/2.5                                       # time parameter of bezier curves
     i = int(rel_time)                                                          # for detecting current section in 4 bezier curves
     t = rel_time-i                                                             # time parameter of bezier curves
     k = i%4                                                                    # detect current section in 4 bezier curves
     points = allPoints[4*k:4*k+4,:]                                            
-    y = bezier_order3(t,points)
+    y = bezier_order3(t, points)
     return y
     
 def measureFollowRate(subDf):
@@ -220,11 +235,11 @@ def main(url,outputPth,designPth):
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
 
-    console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
+    # console = logging.StreamHandler()
+    # console.setLevel(logging.INFO)
 
     logger.addHandler(handler)
-    logger.addHandler(console)
+    # logger.addHandler(console)
 
 
     try:
@@ -257,6 +272,7 @@ def main(url,outputPth,designPth):
         idx2 = df['level']==2
         idx = idx1&idx2
         tmpDf = df[idx].copy()
+        time = tmpDf['timestamp'].tolist()
         score,trail_level2 = measureFollowRate(tmpDf)
         rec_trail = deSpike(trail_level2,1.5)
     #     print(np.min(rec_trail))
@@ -292,7 +308,7 @@ def main(url,outputPth,designPth):
             if state ==2 and level == 2:
                 score,trail_level2 = measureFollowRate(subDf)
                 scoreList.append([level,score])
-                print(level,'\t',score)
+                # print(level,'\t',score)
                 logger.info('question:'+str(level)+' \t score:'+str(score))
                 #print(subDf)
                 rec = trail_level2
@@ -307,7 +323,9 @@ def main(url,outputPth,designPth):
                 img=plt.imread(str(designPth)+"/2.png")         # reading backgram photos with png format
                 plt.imshow(img,extent=[-3.84,3.84,-2.16,2.16])
                 plt.plot(rec[:,1],rec[:,2],'r-')
-                plt.plot(rec[:,3],rec[:,4],'y-')
+                bez_x, bez_y = bezier_pts(time[0], time[-1], len(time))
+                plt.plot(bez_x, bez_y, 'y-')
+                # plt.plot(rec[:,3],rec[:,4],'y-')
                 plt.xticks([])
                 plt.yticks([])
                 plt.xlim(-5,5)
@@ -321,7 +339,8 @@ def main(url,outputPth,designPth):
                 img_en=plt.imread(str(designPth)+"en/en_2.jpg")         # reading backgram photos with png format
                 plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])
                 plt.plot(rec[:,1],rec[:,2],'r-')
-                plt.plot(rec[:,3],rec[:,4],'y-')
+                # plt.plot(rec[:,3],rec[:,4],'y-')
+                plt.plot(bez_x, bez_y, 'y-')
                 plt.xticks([])
                 plt.yticks([])
                 plt.xlim(-5,5)
@@ -362,7 +381,7 @@ def main(url,outputPth,designPth):
                 ROI= ROIs[level]
                 score = measureGazeRate(subDf,ROI)
                 scoreList.append([level,score])
-                print(level,'\t',score)
+                # print(level,'\t',score)
                 logger.info('question:'+str(level)+' \t score:'+str(score))
 
         # # # - - - - - - - - visualization - - - - - - - - - -

@@ -24,7 +24,7 @@ from concurrent.futures import ProcessPoolExecutor, wait, ALL_COMPLETED
 
 app = Flask(__name__)
 
-
+# utils function
 from settings import SALT, RESOURCE_PATH
 def get_md5(d):
     d = dict(sorted(d.items()))
@@ -77,6 +77,7 @@ def balance():
         ball_data = pd.read_csv(url_b)
         train_res = balancer.train_time(ball_data)
 
+
         mkdir_new(out_path + '/result_fig')
         for n in [1, 2, 3]:
             balancer.draw_sav(txt_head_data, mode, n, './src_fig/', out_path+'/result_fig/'+"traj{}.png".format(n))
@@ -95,15 +96,15 @@ def balance():
                         'up': '{:.2f}'.format(des_head_data.loc['max', 'pos_z']), 
                         'down': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_z'])),
                         
-                        'rightForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 1]), 
-                        'leftForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 2]), 
-                        'leftBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 3]),
-                        'rightBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 4]),
+                        'rightForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 1]*100), 
+                        'leftForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 2]*100), 
+                        'leftBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 3]*100),
+                        'rightBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 4]*100),
                         
-                        'rightForthPct': '{:.2f}%'.format(train_res.loc['rate', 1]), 
-                        'leftForthPct': '{:.2f}%'.format(train_res.loc['rate', 2]), 
-                        'leftBackPct': '{:.2f}%'.format(train_res.loc['rate', 3]),
-                        'rightBackPct': '{:.2f}%'.format(train_res.loc['rate', 4])
+                        'rightForthPct': '{:.2f}%'.format(train_res.loc['rate', 1]*100), 
+                        'leftForthPct': '{:.2f}%'.format(train_res.loc['rate', 2]*100), 
+                        'leftBackPct': '{:.2f}%'.format(train_res.loc['rate', 3]*100),
+                        'rightBackPct': '{:.2f}%'.format(train_res.loc['rate', 4]*100)
 
                     }          
         }
@@ -118,10 +119,10 @@ def balance():
         logger.info("Down: {:.2f}".format(des_head_data.loc['min', 'pos_z']))
         logger.info("--------------------------------")
         logger.info("Succeed rates calculated.")
-        logger.info("Right_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 1], train_res.loc['rate', 1]))
-        logger.info("Left_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 2], train_res.loc['rate', 2]))
-        logger.info("Left_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 3], train_res.loc['rate', 3]))
-        logger.info("Right_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 4], train_res.loc['rate', 4]))
+        logger.info("Right_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 1]*100, train_res.loc['rate', 1]*100))
+        logger.info("Left_forth: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 2]*100, train_res.loc['rate', 2]*100))
+        logger.info("Left_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 3]*100, train_res.loc['rate', 3]*100))
+        logger.info("Right_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 4]*100, train_res.loc['rate', 4]*100))
         logger.info("--------------END---------------")
 
         return jsonify(out_dict)
@@ -222,7 +223,6 @@ def eye_screen():
     results = calc_eye_screen(url, gender, education, age)
     return jsonify(results)
 
-    
 def calc_eye_screen(url, gender, education, age):
     with requests.get(url) as r:
         assert r.status_code == 200, 'HTTP Connection Error: {}, {}'.format(r.status_code, r.content)
@@ -232,7 +232,6 @@ def calc_eye_screen(url, gender, education, age):
     try:
         es = EyeScreen(txt, gender, education, age)
         data = es.preprocess_feat(es.text2DF())
-        print(data)
         moca, mmse = es.predict(data)
         cog_score = es.cog_score(data)
     except Exception as e:
@@ -288,6 +287,7 @@ def firefly():
         'msg':'Firefly plot succeed.',
         'body':None
     })
+
 
 
 if __name__ == '__main__':
