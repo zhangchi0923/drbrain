@@ -54,15 +54,18 @@ class EyeScreen(object):
         x, y, time = self.get_lvl_state(df, 2, 2)
 
         bez_x, bez_y = self.get_live_position(time/1000, time[0]/1000)
-        model_x, model_y = self.corrModel(x, y, bez_x, bez_y)
-        corr_x = np.corrcoef(x, bez_x)[0, 1]; corr_y = np.corrcoef(y, bez_y)[0, 1]
+        model = self.corrModel(x, y, bez_x, bez_y)
+        corr_x = np.corrcoef(x, bez_x, rowvar=False)[0, 1]; corr_y = np.corrcoef(y, bez_y, rowvar=False)[0, 1]
         # print(corr_x, corr_y)
         if corr_x < 0.9 or corr_y < 0.8:
-            model_x.coef_ = np.array([[1,0],[0,1]]); model_y.coef_ = np.array([[1,0],[0,1]])
-            model_y.intercept_ = np.array([0,0]); model_y.intercept_ = np.array([0,0])
+            model.coef_ = np.array([[1,0],[0,1]])
+            model.intercept_ = np.array([0,0])
 
-        x = model_x.predict(x.reshape(-1, 1))
-        y = model_y.predict(y.reshape(-1, 1))
+        X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
+        # print(X.shape)
+        # print(model.predict(X))
+        x = model.predict(X)[:, 0]
+        y = model.predict(X)[:, 1]
 
         detector_l2 = eyeMovement.EyeMovement(x, y, time, AOIs, BEZIER_POINTS)
         att = detector_l2.measureFollowRate()
@@ -70,9 +73,12 @@ class EyeScreen(object):
         # other
         for level in levels:
             x, y, time = self.get_lvl_state(df, level, 2)
+            X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
             time = time.reshape(-1, 1)
-            x = model_x.predict(x.reshape(-1, 1))
-            y = model_y.predict(y.reshape(-1, 1))
+            # print(model_x.coef_, model_y.coef_)
+            # print(model_x.intercept_, model_y.intercept_)
+            x = model.predict(X)[:, 0]
+            y = model.predict(X)[:, 1]
             x = x.flatten(); y = y.flatten(); time = time.flatten()
             detector = eyeMovement.EyeMovement(x, y, time, AOIs[level], BEZIER_POINTS)
             fix_data = detector.eye_movements_detector(x, y, time)
@@ -125,8 +131,13 @@ class EyeScreen(object):
         return bez_x, bez_y
 
     def corrModel(self, x, y, bez_x, bez_y):
-        model_x = LinearRegression()
-        model_y = LinearRegression()
-        model_x.fit(x.reshape(-1, 1), np.array(bez_x).reshape(-1, 1))
-        model_y.fit(y.reshape(-1, 1), np.array(bez_y).reshape(-1, 1))
-        return model_x, model_y
+        subDf = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1), np.array(bez_x).reshape(-1, 1), np.array(bez_y).reshape(-1,1)), axis=1)
+        # print(subDf.shape)
+        X = subDf[:, 0: 2]; Y = subDf[:, 2: 4]
+        model = LinearRegression()
+        model.fit(X, Y)
+        # print(model.coef_)
+        # print(model.intercept_)
+        # model_x.fit(x.reshape(-1, 1), np.array(bez_x).reshape(-1, 1))
+        # model_y.fit(y.reshape(-1, 1), np.array(bez_y).reshape(-1, 1))
+        return model
