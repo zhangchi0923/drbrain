@@ -72,6 +72,7 @@ class EyeMovement():
         ang_diff = np.arctan(dist / 5.9)*180/pi
         vel = np.divide(ang_diff, time_int)         # degree / ms
         threshold_vel = vel.copy()
+        # print(threshold_vel)
 
         for i in range(len(threshold_vel)):
             if threshold_vel[i] < maxvel/1000:
@@ -285,6 +286,67 @@ class EyeMovement():
                 cnt += 1
         ratio = cnt/nObserv
         return ratio
+    
+    def fanbo_follow_rate(self, subDf):
+        nObserv = len(subDf)
+        cnt = 0
+        eps = 0.55                                                              # distance to rocket
+        rec = []
+        start_time = subDf['timestamp'].iat[0]/1000
+        for i in range(nObserv):
+            x = subDf['pos_x'].iat[i]
+            y = subDf['pos_y'].iat[i]
+            t = subDf['timestamp'].iat[i]/1000
+            pos_rocket = self._get_live_position(t, start_time)
+            X0 = pos_rocket[0]
+            Y0 = pos_rocket[1]
+            rec.append([t,x,y,X0,Y0])
+            if (x-X0)**2+(y-Y0)**2 < eps**2:
+                cnt += 1
+        ratio = cnt/nObserv
+        return ratio
+    
+    def findMinMax(self, a, b):
+        if a>b:
+            return b,a
+        else:
+            return a,b
+        
+    def measureGazeRate(self, subDf, ROI):
+        """
+        measure the ratio of the gaze time on ROI 
+
+        Parameters
+        ----------
+        subDf : pandas dataFrame with column names of 'timestamp','pos_x','pos_y'             
+        ROI: list of 4 float numbers, Rectangular diagonal vertex coordinates. 
+            just as [(x0,y0),(x1,y1)],express a rectangle with 4 corners(x0,y0),(x1,y0),(x1,y1),(x0,y1)
+                
+        Returns
+        -------
+        ratio :     float, time ratio of gaze time
+
+        Example
+        -------
+        >>> measureGazeRate(df,[(5,6),(0,1)])
+        0.5
+        """
+        ROI = self._extend_AOI()                                                               # margin of ROI
+        X0,X1 = self.findMinMax(ROI[0][0],ROI[1][0])
+        Y0,Y1 = self.findMinMax(ROI[0][1],ROI[1][1])
+        nObserv = len(subDf)
+        total_Time = subDf['timestamp'].iat[nObserv-1] - subDf['timestamp'].iat[0]
+        gaze_time = 0
+        for i in range(1,nObserv):
+            x = subDf['pos_x'].iat[i]
+            y = subDf['pos_y'].iat[i]
+            #t = subDf['timestamp'].iat[i]
+            if (x-X0)*(x-X1)<0 and (y-Y0)*(y-Y1)<0:
+                gaze_time += subDf['timestamp'].iat[i]-subDf['timestamp'].iat[i-1]
+        ratio = gaze_time/total_Time
+        return ratio
+    
+
 
 
 

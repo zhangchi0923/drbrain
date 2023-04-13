@@ -47,11 +47,11 @@ class EyeScreen(object):
         idx = idx1 & idx2
         tmpDf = df[idx].copy()
         x, y, time = np.array(tmpDf['pos_x']), np.array(tmpDf['pos_y']), np.array(tmpDf['timestamp'])
-        return x, y, time
+        return x, y, time, tmpDf # 返回tmpdf是为了应付烦勃，没办法，后面可以删了
     
     def preprocess_feat(self, df) -> pd.DataFrame:
         levels = list(range(3, 12, 1))
-        x, y, time = self.get_lvl_state(df, 2, 2)
+        x, y, time, tmpdf = self.get_lvl_state(df, 2, 2)
 
         bez_x, bez_y = self.get_live_position(time/1000, time[0]/1000)
         model = self.corrModel(x, y, bez_x, bez_y)
@@ -68,11 +68,11 @@ class EyeScreen(object):
         y = model.predict(X)[:, 1]
 
         detector_l2 = eyeMovement.EyeMovement(x, y, time, AOIs, BEZIER_POINTS)
-        att = detector_l2.measureFollowRate()
+        att = detector_l2.fanbo_follow_rate(tmpdf)
         feats = [att]
         # other
         for level in levels:
-            x, y, time = self.get_lvl_state(df, level, 2)
+            x, y, time, tmpdf = self.get_lvl_state(df, level, 2)
             X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
             time = time.reshape(-1, 1)
             # print(model_x.coef_, model_y.coef_)
@@ -83,7 +83,12 @@ class EyeScreen(object):
             detector = eyeMovement.EyeMovement(x, y, time, AOIs[level], BEZIER_POINTS)
             fix_data = detector.eye_movements_detector(x, y, time)
             _, _, merged = detector.merge_fixation(fix_data)
-            feats.append(detector.AOI_fixation_ratio(merged))
+            # feats.append(detector.AOI_fixation_ratio(merged))
+
+            # 烦勃要求的
+            feats.append(detector.measureGazeRate(tmpdf, AOIs[level]))
+
+
             ffd, ttff, nfbff = detector.AOI_first_fixation(merged)
             feats += [ffd, ttff, nfbff]
         result = pd.DataFrame([self._gender, self._education, self._age] + feats).T
@@ -106,6 +111,8 @@ class EyeScreen(object):
     
     def cog_score(self, df) -> list:
         result = df.loc[:, self.cog_cat].values[0].tolist()
+        # 伟大的烦勃要求的
+        return [x*100 for x in result]
         return [x*100 if x > 0.05 else x*100 + 0.5*random.randint(0, 10) for x in result]
 
     def bezier_order3(self, t, points):
