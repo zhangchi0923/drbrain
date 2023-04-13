@@ -16,6 +16,7 @@ from Pingpong import Pingpong
 from Balance import Balancer
 from EyeScreen import EyeScreen
 from Firefly import Firefly
+import pbb_score
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -220,10 +221,10 @@ def eye_screen():
 
     executer = ProcessPoolExecutor(1)
     executer.submit(draw_eye_screen, url, save_pth, src)
-    results = calc_eye_screen(url, gender, education, age)
+    results = calc_eye_screen(url, gender, education, age, save_pth, src)
     return jsonify(results)
 
-def calc_eye_screen(url, gender, education, age):
+def calc_eye_screen(url, gender, education, age, save_pth, src):
     with requests.get(url) as r:
         assert r.status_code == 200, 'HTTP Connection Error: {}, {}'.format(r.status_code, r.content)
         # logger.error("Cannot access url data!")
@@ -233,7 +234,9 @@ def calc_eye_screen(url, gender, education, age):
         es = EyeScreen(txt, gender, education, age)
         data = es.preprocess_feat(es.text2DF())
         moca, mmse = es.predict(data)
-        cog_score = es.cog_score(data)
+        cog_score = pbb_score.main(url, save_pth, src)
+        cog_score = [x*100 for x in cog_score]
+        print(cog_score)
     except Exception as e:
         # logger.exception(e)
         return {

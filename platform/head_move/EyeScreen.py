@@ -47,32 +47,33 @@ class EyeScreen(object):
         idx = idx1 & idx2
         tmpDf = df[idx].copy()
         x, y, time = np.array(tmpDf['pos_x']), np.array(tmpDf['pos_y']), np.array(tmpDf['timestamp'])
-        return x, y, time, tmpDf # 返回tmpdf是为了应付烦勃，没办法，后面可以删了
+        return x, y, time
     
     def preprocess_feat(self, df) -> pd.DataFrame:
         levels = list(range(3, 12, 1))
-        x, y, time, tmpdf = self.get_lvl_state(df, 2, 2)
+        x, y, time = self.get_lvl_state(df, 2, 2)
 
         bez_x, bez_y = self.get_live_position(time/1000, time[0]/1000)
         model = self.corrModel(x, y, bez_x, bez_y)
         corr_x = np.corrcoef(x, bez_x, rowvar=False)[0, 1]; corr_y = np.corrcoef(y, bez_y, rowvar=False)[0, 1]
-        # print(corr_x, corr_y)
+        print(corr_x, corr_y)
         if corr_x < 0.9 or corr_y < 0.8:
             model.coef_ = np.array([[1,0],[0,1]])
             model.intercept_ = np.array([0,0])
-
+        print(model.coef_, model.intercept_)
         X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
         # print(X.shape)
         # print(model.predict(X))
         x = model.predict(X)[:, 0]
         y = model.predict(X)[:, 1]
+        tmpdf = pd.DataFrame({'timestamp':time, 'pos_x': x, 'pos_y': y})
 
         detector_l2 = eyeMovement.EyeMovement(x, y, time, AOIs, BEZIER_POINTS)
         att = detector_l2.fanbo_follow_rate(tmpdf)
         feats = [att]
         # other
         for level in levels:
-            x, y, time, tmpdf = self.get_lvl_state(df, level, 2)
+            x, y, time = self.get_lvl_state(df, level, 2)
             X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
             time = time.reshape(-1, 1)
             # print(model_x.coef_, model_y.coef_)
@@ -86,6 +87,7 @@ class EyeScreen(object):
             # feats.append(detector.AOI_fixation_ratio(merged))
 
             # 烦勃要求的
+            tmpdf = pd.DataFrame({'timestamp':time, 'pos_x': x, 'pos_y': y})
             feats.append(detector.measureGazeRate(tmpdf, AOIs[level]))
 
 
