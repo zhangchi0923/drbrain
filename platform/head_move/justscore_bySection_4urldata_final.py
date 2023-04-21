@@ -4,7 +4,7 @@ Created on: Wed Jun 15 17:46:34 2022
 Email:      pbb_194@163.com
 @author:    panBaobao
 """
-import sys,time,os
+import sys, time, os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -111,6 +111,7 @@ def measureFollowRate(subDf):
     cnt = 0
     eps = 0.55                                                              # distance to rocket
     rec = []
+    # print(subDf)
     start_time = subDf['timestamp'].iat[0]/1000
     for i in range(nObserv):
         x = subDf['pos_x'].iat[i]
@@ -124,7 +125,7 @@ def measureFollowRate(subDf):
             cnt += 1
     ratio = cnt/nObserv
     rec = np.array(rec)
-    return ratio,rec
+    return ratio, rec
             
 def measureGazeRate(subDf,ROI):
     """
@@ -235,11 +236,11 @@ def main(url,outputPth,designPth):
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
 
-    # console = logging.StreamHandler()
-    # console.setLevel(logging.INFO)
+    console = logging.StreamHandler()
+    console.setLevel(logging.INFO)
 
     logger.addHandler(handler)
-    # logger.addHandler(console)
+    logger.addHandler(console)
 
 
     try:
@@ -273,6 +274,7 @@ def main(url,outputPth,designPth):
         idx = idx1&idx2
         tmpDf = df[idx].copy()
         time = tmpDf['timestamp'].tolist()
+        # print(tmpDf)
         score,trail_level2 = measureFollowRate(tmpDf)
         rec_trail = deSpike(trail_level2,1.5)
     #     print(np.min(rec_trail))
@@ -281,7 +283,8 @@ def main(url,outputPth,designPth):
     #     print('corrcoef: \n',corrMat[0,2],corrMat[1,3])
         logger.info('corrcoef: \n'+str(corrMat[0,2])+'   '+str(corrMat[1,3]))
         model = correctDataEstimate(rec_trail)
-        if corrMat[0,2] < 0.9 or corrMat[1,3] < 0.8:                #相关系数
+        # if corrMat[0,2] < 0.9 or corrMat[1,3] < 0.8:                #相关系数
+        if corrMat[0,2] < 0 or corrMat[1,3] < 0:                #相关系数
             model.coef_ = np.array([[1,0],[0,1]])
             model.intercept_ = np.array([0,0])
         logger.info("regression coefficients:\n"+str(model.coef_))
@@ -335,20 +338,20 @@ def main(url,outputPth,designPth):
                 fig.savefig(outfileName,dpi = 300)
                 plt.close()
                 # en version
-                fig_en = plt.figure(figsize=(8.5, 6))
-                img_en=plt.imread(str(designPth)+"en/en_2.jpg")         # reading backgram photos with png format
-                plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])
-                plt.plot(rec[:,1],rec[:,2],'r-')
-                # plt.plot(rec[:,3],rec[:,4],'y-')
-                plt.plot(bez_x, bez_y, 'y-')
-                plt.xticks([])
-                plt.yticks([])
-                plt.xlim(-5,5)
-                plt.ylim(-3,3)
-                plt.tight_layout()
-                outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
-                fig_en.savefig(outfileName,dpi = 300)
-                plt.close()
+                # fig_en = plt.figure(figsize=(8.5, 6))
+                # img_en=plt.imread(str(designPth)+"en/en_2.jpg")         # reading backgram photos with png format
+                # plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])
+                # plt.plot(rec[:,1],rec[:,2],'r-')
+                # # plt.plot(rec[:,3],rec[:,4],'y-')
+                # plt.plot(bez_x, bez_y, 'y-')
+                # plt.xticks([])
+                # plt.yticks([])
+                # plt.xlim(-5,5)
+                # plt.ylim(-3,3)
+                # plt.tight_layout()
+                # outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
+                # fig_en.savefig(outfileName,dpi = 300)
+                # plt.close()
 
             if state == 2 and level == 1:
                 fig = plt.figure(figsize=(8.5, 6))                                       # plot interface
@@ -364,18 +367,18 @@ def main(url,outputPth,designPth):
                 fig.savefig(outfileName,dpi = 300)
                 plt.close()
                 # en version
-                fig_en = plt.figure(figsize=(8.5, 6))                                       # plot interface
-                plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
-                img_en=plt.imread(str(designPth)+"en/en_1.png")         # reading backgram photos with png format
-                plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
-                plt.plot(x,y,'r-',linewidth=0.5)
-                plt.xticks([])
-                plt.yticks([])
-                plt.xlim(-5,5)
-                plt.ylim(-3,3)
-                outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
-                fig_en.savefig(outfileName,dpi = 300)
-                plt.close()
+                # fig_en = plt.figure(figsize=(8.5, 6))                                       # plot interface
+                # plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
+                # img_en=plt.imread(str(designPth)+"en/en_1.png")         # reading backgram photos with png format
+                # plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
+                # plt.plot(x,y,'r-',linewidth=0.5)
+                # plt.xticks([])
+                # plt.yticks([])
+                # plt.xlim(-5,5)
+                # plt.ylim(-3,3)
+                # outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
+                # fig_en.savefig(outfileName,dpi = 300)
+                # plt.close()
 
             if state ==2 and level > 2:
                 ROI= ROIs[level]
@@ -411,31 +414,31 @@ def main(url,outputPth,designPth):
                 fig.savefig(outfileName,dpi = 300)
                 plt.close()
                 # en version
-                fig_en = plt.figure(figsize=(8.5, 6))                                       # plot interface
-                plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
-                img_en=plt.imread(str(designPth)+'en/en_'+str(level)+".png")         # reading backgram photos with png format
-                plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
-                plt.plot(x,y,'r-',linewidth=0.5)
-                x0 = ROI[0][0]
-                y0 = ROI[0][1]
-                x1 = ROI[1][0]
-                y1 = ROI[1][1]
-                box_x =  [x0,x1,x1,x0,x0]
-                box_y =  [y0,y0,y1,y1,y0]
-                plt.plot(box_x,box_y,c='yellow')
-                thing = stateDict[state]
-                if state==2:
-                    mycolor = 'r'
-                else:
-                    mycolor = 'b'
-    #             plt.title(f'第{level}题({thing})')
-                plt.xticks([])
-                plt.yticks([])
-                plt.xlim(-5,5)
-                plt.ylim(-3,3)
-                outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
-                fig_en.savefig(outfileName,dpi = 300)
-                plt.close()
+    #             fig_en = plt.figure(figsize=(8.5, 6))                                       # plot interface
+    #             plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
+    #             img_en=plt.imread(str(designPth)+'en/en_'+str(level)+".png")         # reading backgram photos with png format
+    #             plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
+    #             plt.plot(x,y,'r-',linewidth=0.5)
+    #             x0 = ROI[0][0]
+    #             y0 = ROI[0][1]
+    #             x1 = ROI[1][0]
+    #             y1 = ROI[1][1]
+    #             box_x =  [x0,x1,x1,x0,x0]
+    #             box_y =  [y0,y0,y1,y1,y0]
+    #             plt.plot(box_x,box_y,c='yellow')
+    #             thing = stateDict[state]
+    #             if state==2:
+    #                 mycolor = 'r'
+    #             else:
+    #                 mycolor = 'b'
+    # #             plt.title(f'第{level}题({thing})')
+    #             plt.xticks([])
+    #             plt.yticks([])
+    #             plt.xlim(-5,5)
+    #             plt.ylim(-3,3)
+    #             outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
+    #             fig_en.savefig(outfileName,dpi = 300)
+    #             plt.close()
         logger.info('Plotting succeed.')
     except (SystemExit,KeyboardInterrupt):
         raise

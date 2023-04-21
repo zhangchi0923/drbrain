@@ -11,6 +11,8 @@ import sys
 import requests
 import json
 import hashlib
+import logging
+import datetime
 import pandas as pd
 from Pingpong import Pingpong
 from Balance import Balancer
@@ -41,6 +43,19 @@ def mkdir_new(path):
         if not os.path.exists(path):
             os.makedirs(path) 
 
+def get_logger(log_id, pth):
+        date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        exe_logger = logging.getLogger()
+        exe_logger.setLevel(level=logging.INFO)
+        handler = logging.FileHandler(os.path.join(pth, 'log_' + date_time + '_' + log_id))
+        handler.setLevel(logging.INFO)
+
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+
+        exe_logger.addHandler(handler)
+        return exe_logger
+
 @app.route('/balance', methods=['POST'])
 def balance():
     args = request.get_json(force=True)
@@ -64,8 +79,8 @@ def balance():
         # log setting
         _, sid = os.path.split(url_h)
         # print(sid)
-        mkdir_new(out_path + '/log')
-        logger = balancer.get_logger(sid, out_path + '/log')
+        mkdir_new(out_path + './balance_log')
+        logger = balancer.get_logger(sid, './balance_log')
         logger.info('Authorization succeed.')
         # requests to get data
         with requests.get(url_h) as url_data:
@@ -154,8 +169,8 @@ def pingpong():
         # log setting
         _, sid = os.path.split(url)
         # print(sid)
-        mkdir_new(write_pth + '/log')
-        logger = pp.get_logger(sid, write_pth + '/log')
+        mkdir_new('./pingpong_log')
+        logger = pp.get_logger(sid, './pingpong_log')
         logger.info('Authorization succeed.')
         # requests to get data
         with requests.get(url) as url_data:
@@ -201,6 +216,7 @@ def pingpong():
 
 @app.route('/eye/screen', methods=['POST'])
 def eye_screen():
+
     args = request.get_json(force=True)
     auth = request.headers.get('Authorization')
     auth_srv = get_md5(args)
@@ -218,16 +234,22 @@ def eye_screen():
     src = args['backupResources']
     save_pth = args['saveResourcesPath']
 
+    _, sid = os.path.split(url)
+    mkdir_new('./eyescreen_log')
+    logger = get_logger(sid, './eyescreen_log')
+    logger.info('Authorization succeed.')
 
     executer = ProcessPoolExecutor(1)
     executer.submit(draw_eye_screen, url, save_pth, src)
-    results = calc_eye_screen(url, gender, education, age, save_pth, src)
+    logger.info('Eye screen plot submitted.')
+    results = calc_eye_screen(url, gender, education, age, save_pth, src, logger)
+    logger.info('Eye screen results: {}'.format(results))
     return jsonify(results)
 
-def calc_eye_screen(url, gender, education, age, save_pth, src):
+def calc_eye_screen(url, gender, education, age, save_pth, src, logger):
     with requests.get(url) as r:
         assert r.status_code == 200, 'HTTP Connection Error: {}, {}'.format(r.status_code, r.content)
-        # logger.error("Cannot access url data!")
+        logger.error("Cannot access url data!")
         txt = r.text
     
     try:
@@ -236,9 +258,9 @@ def calc_eye_screen(url, gender, education, age, save_pth, src):
         moca, mmse = es.predict(data)
         cog_score = pbb_score.main(url, save_pth, src)
         cog_score = [x*100 for x in cog_score]
-        print(cog_score)
+        logger.info('Cog score: {}\nMoCA: {} MMSE: {}'.format(cog_score, moca, mmse))
     except Exception as e:
-        # logger.exception(e)
+        logger.exception(e)
         return {
             'code':500,
             # 'msg':'Error during score predicting.',
@@ -262,6 +284,7 @@ def calc_eye_screen(url, gender, education, age, save_pth, src):
         'msg':'AI prediction succeed.',
         'body':body
     }
+    logger.info('Eye screen prediction succeed.')
     return results
 
 def draw_eye_screen(url, out_pth, design_pth):
@@ -282,14 +305,24 @@ def firefly():
         })
     url = args['url']
     savePath = args['savePath']
-    df = pd.read_csv(url, index_col=0)
-    firefly = Firefly(df, savePath)
-    firefly.plot()
-    return jsonify({
-        'code':200,
-        'msg':'Firefly plot succeed.',
-        'body':None
-    })
+    mkdir_new(savePath)
+
+    _, sid = os.path.split(url)
+    mkdir_new('./firefly_log')
+    logger = get_logger(sid, './firefly_log')
+    try:
+        df = pd.read_csv(url, index_col=0)
+        logger.info('Url data read successfully.')
+        firefly = Firefly(df, savePath)
+        firefly.plot()
+        logger.info('Firefly plot succeed.')
+        return jsonify({
+            'code':200,
+            'msg':'Firefly plot succeed.',
+            'body':None
+        })
+    except Exception as e:
+        logger.exception(e)
 
 
 
