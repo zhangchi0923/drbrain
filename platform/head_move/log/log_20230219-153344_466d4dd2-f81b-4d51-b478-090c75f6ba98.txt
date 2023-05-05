@@ -1,0 +1,14 @@
+2023-02-19 15:33:44,488 - root - INFO - Authorization succeed.
+2023-02-19 15:33:45,396 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-02-19 15:33:52,127 - root - INFO - Ranges calculated.
+2023-02-19 15:33:52,127 - root - INFO - --------------------------------
+2023-02-19 15:33:52,127 - root - INFO - Forth: 60.20
+2023-02-19 15:33:52,128 - root - INFO - Back: 54.90
+2023-02-19 15:33:52,129 - root - INFO - Left: 71.60
+2023-02-19 15:33:52,129 - root - INFO - Right: -59.80
+2023-02-19 15:33:52,129 - root - INFO - Up: 21.20
+2023-02-19 15:33:52,129 - root - INFO - Down: 60.90
+2023-02-19 15:33:52,129 - root - INFO - --------------END---------------
+2023-02-19 15:33:52,130 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2023 15:33:52] "[37mPOST /pingpong HTTP/1.1[0m" 200 -
+2023-02-19 15:34:58,214 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\Pingpong.py', reloading
+2023-02-19 15:34:58,216 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\Pingpong.py', reloading

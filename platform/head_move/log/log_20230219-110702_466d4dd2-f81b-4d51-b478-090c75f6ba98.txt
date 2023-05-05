@@ -1,0 +1,13 @@
+2023-02-19 11:07:02,210 - root - INFO - Authorization succeed.
+2023-02-19 11:07:03,397 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-02-19 11:07:10,047 - root - INFO - Ranges calculated.
+2023-02-19 11:07:10,047 - root - INFO - --------------------------------
+2023-02-19 11:07:10,047 - root - INFO - Forth: 60.20
+2023-02-19 11:07:10,047 - root - INFO - Back: 54.90
+2023-02-19 11:07:10,048 - root - INFO - Left: 71.60
+2023-02-19 11:07:10,048 - root - INFO - Right: -59.80
+2023-02-19 11:07:10,048 - root - INFO - Up: 21.20
+2023-02-19 11:07:10,048 - root - INFO - Down: 60.90
+2023-02-19 11:07:10,048 - root - INFO - --------------END---------------
+2023-02-19 11:07:10,049 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2023 11:07:10] "[37mPOST /pingpong HTTP/1.1[0m" 200 -
+2023-02-19 15:31:12,791 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\frame.py', reloading

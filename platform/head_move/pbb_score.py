@@ -19,7 +19,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-import logging
 import datetime
 
 # # # - - - - - - - - coordinate of region of object 
@@ -228,21 +227,6 @@ def main(url,outputPth,designPth):
     mkdir_new(outputPth)
     tmp , sid = os.path.split(url)
     date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-    # logger = None
-    # logger = logging.getLogger()
-    # logger.setLevel(level = logging.INFO)
-    # handler = logging.FileHandler(os.path.join(outputPth,'log') )
-    # handler.setLevel(logging.INFO)
-
-    # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    # handler.setFormatter(formatter)
-
-    # console = logging.StreamHandler()
-    # console.setLevel(logging.INFO)
-
-    # logger.addHandler(handler)
-    # logger.addHandler(console)
-
 
     try:
         maker = 'origin'
@@ -312,142 +296,19 @@ def main(url,outputPth,designPth):
                 score,trail_level2 = measureFollowRate(subDf)
                 # scoreList.append([level,score])
                 scoreList.append(score)
-                # print(level,'\t',score)
-                # logger.info('question:'+str(level)+' \t score:'+str(score))
-                #print(subDf)
-    #             rec = trail_level2
-    #             fig = plt.figure(figsize=(8.5,9))
-    #             plt.subplot(2,1,1)
-    #             plt.plot(rec[:,0],rec[:,1:],'-')
-    #             plt.title('score: '+str(round(score,4)))
-    #             plt.xlabel('Times(s)')
-    #             plt.legend(['pos_x','pos_y','rocket_x','rocket_y'])
-    #             fig = plt.figure(figsize=(8.5, 6))
-    # #             plt.subplot(2,1,2)
-    #             img=plt.imread(str(designPth)+"/2.png")         # reading backgram photos with png format
-    #             plt.imshow(img,extent=[-3.84,3.84,-2.16,2.16])
-    #             plt.plot(rec[:,1],rec[:,2],'r-')
-    #             bez_x, bez_y = bezier_pts(time[0], time[-1], len(time))
-    #             plt.plot(bez_x, bez_y, 'y-')
-    #             # plt.plot(rec[:,3],rec[:,4],'y-')
-    #             plt.xticks([])
-    #             plt.yticks([])
-    #             plt.xlim(-5,5)
-    #             plt.ylim(-3,3)
-    #             plt.tight_layout()
-    #             outfileName = os.path.join(outputPth,'trail_'+str(level)+'.jpg')
-    #             fig.savefig(outfileName,dpi = 300)
-    #             plt.close()
-    #             # en version
-    #             fig_en = plt.figure(figsize=(8.5, 6))
-    #             img_en=plt.imread(str(designPth)+"en/en_2.jpg")         # reading backgram photos with png format
-    #             plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])
-    #             plt.plot(rec[:,1],rec[:,2],'r-')
-    #             # plt.plot(rec[:,3],rec[:,4],'y-')
-    #             plt.plot(bez_x, bez_y, 'y-')
-    #             plt.xticks([])
-    #             plt.yticks([])
-    #             plt.xlim(-5,5)
-    #             plt.ylim(-3,3)
-    #             plt.tight_layout()
-    #             outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
-    #             fig_en.savefig(outfileName,dpi = 300)
-    #             plt.close()
-
-            # if state == 2 and level == 1:
-                # fig = plt.figure(figsize=(8.5, 6))                                       # plot interface
-                # plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
-                # img=plt.imread(str(designPth)+"1.png")         # reading backgram photos with png format
-                # plt.imshow(img,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
-                # plt.plot(x,y,'r-',linewidth=0.5)
-                # plt.xticks([])
-                # plt.yticks([])
-                # plt.xlim(-5,5)
-                # plt.ylim(-3,3)
-                # outfileName = os.path.join(outputPth,'trail_'+str(level)+'.jpg')
-                # fig.savefig(outfileName,dpi = 300)
-                # plt.close()
-                # # en version
-                # fig_en = plt.figure(figsize=(8.5, 6))                                       # plot interface
-                # plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
-                # img_en=plt.imread(str(designPth)+"en/en_1.png")         # reading backgram photos with png format
-                # plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
-                # plt.plot(x,y,'r-',linewidth=0.5)
-                # plt.xticks([])
-                # plt.yticks([])
-                # plt.xlim(-5,5)
-                # plt.ylim(-3,3)
-                # outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
-                # fig_en.savefig(outfileName,dpi = 300)
-                # plt.close()
 
             if state ==2 and level > 2:
                 ROI= ROIs[level]
                 score = measureGazeRate(subDf,ROI)
                 # scoreList.append([level,score])
                 scoreList.append(score)
-                # print(level,'\t',score)
-                # logger.info('question:'+str(level)+' \t score:'+str(score))
 
-        # # # - - - - - - - - visualization - - - - - - - - - -
-    #             fig = plt.figure(figsize=(8.5, 6))                                       # plot interface
-    #             plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
-    #             img=plt.imread(str(designPth)+str(level)+".png")         # reading backgram photos with png format
-    #             plt.imshow(img,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
-    #             plt.plot(x,y,'r-',linewidth=0.5)
-    #             x0 = ROI[0][0]
-    #             y0 = ROI[0][1]
-    #             x1 = ROI[1][0]
-    #             y1 = ROI[1][1]
-    #             box_x =  [x0,x1,x1,x0,x0]
-    #             box_y =  [y0,y0,y1,y1,y0]
-    #             plt.plot(box_x,box_y,c='yellow')
-    #             thing = stateDict[state]
-    #             if state==2:
-    #                 mycolor = 'r'
-    #             else:
-    #                 mycolor = 'b'
-    # #             plt.title(f'第{level}题({thing})')
-    #             plt.xticks([])
-    #             plt.yticks([])
-    #             plt.xlim(-5,5)
-    #             plt.ylim(-3,3)
-    #             outfileName = os.path.join(outputPth,'trail_'+str(level)+'.jpg')
-    #             fig.savefig(outfileName,dpi = 300)
-    #             plt.close()
-    #             # en version
-    #             fig_en = plt.figure(figsize=(8.5, 6))                                       # plot interface
-    #             plt.subplots_adjust(left=0.01, bottom=0.01, right=0.99, top=0.97)
-    #             img_en=plt.imread(str(designPth)+'en/en_'+str(level)+".png")         # reading backgram photos with png format
-    #             plt.imshow(img_en,extent=[-3.84,3.84,-2.16,2.16])                           # location of canvas
-    #             plt.plot(x,y,'r-',linewidth=0.5)
-    #             x0 = ROI[0][0]
-    #             y0 = ROI[0][1]
-    #             x1 = ROI[1][0]
-    #             y1 = ROI[1][1]
-    #             box_x =  [x0,x1,x1,x0,x0]
-    #             box_y =  [y0,y0,y1,y1,y0]
-    #             plt.plot(box_x,box_y,c='yellow')
-    #             thing = stateDict[state]
-    #             if state==2:
-    #                 mycolor = 'r'
-    #             else:
-    #                 mycolor = 'b'
-    # #             plt.title(f'第{level}题({thing})')
-    #             plt.xticks([])
-    #             plt.yticks([])
-    #             plt.xlim(-5,5)
-    #             plt.ylim(-3,3)
-    #             outfileName = os.path.join(outputPth,'trail_en_'+str(level)+'.jpg')
-    #             fig_en.savefig(outfileName,dpi = 300)
-    #             plt.close()
-        # logger.info('Plotting succeed.')
     except (SystemExit,KeyboardInterrupt):
         raise
     except Exception:
         # logger.error("Faild to open sklearn.txt from logger.error",exc_info = True)
         pass
-    print(scoreList)
+    # print(scoreList)
     return scoreList
 
 #%%                           
@@ -456,7 +317,5 @@ if __name__ == "__main__":
     url = sys.argv[1]
     outputPth = sys.argv[2]
     designPth = sys.argv[3]
-    # url = 'https://cos.drbrain.net/profile/tj/2022/8/19/5b894af5-5aee-4e47-be11-8d39516cc529.txt'
-    # outputPth = r"E:\spyder_projects\drbrain\my_code\gaze_preprocessing\backup\figures\test_5b894af5-5aee-4e47-be11-8d39516cc529"
     main(url,outputPth,designPth)
     t1 = time.time()

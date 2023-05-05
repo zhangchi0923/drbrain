@@ -1,0 +1,12 @@
+2023-02-19 15:35:16,968 - root - INFO - Authorization succeed.
+2023-02-19 15:35:18,141 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-02-19 15:35:24,796 - root - INFO - Ranges calculated.
+2023-02-19 15:35:24,797 - root - INFO - --------------------------------
+2023-02-19 15:35:24,797 - root - INFO - Forth: 60.20
+2023-02-19 15:35:24,797 - root - INFO - Back: 54.90
+2023-02-19 15:35:24,797 - root - INFO - Left: 71.60
+2023-02-19 15:35:24,797 - root - INFO - Right: -59.80
+2023-02-19 15:35:24,797 - root - INFO - Up: 21.20
+2023-02-19 15:35:24,797 - root - INFO - Down: 60.90
+2023-02-19 15:35:24,797 - root - INFO - --------------END---------------
+2023-02-19 15:35:24,798 - werkzeug - INFO - 127.0.0.1 - - [19/Feb/2023 15:35:24] "[37mPOST /pingpong HTTP/1.1[0m" 200 -

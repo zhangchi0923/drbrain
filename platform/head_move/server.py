@@ -231,8 +231,10 @@ def eye_screen():
     age = args['age']
     education = args['education']
     url = args['url']
-    src = args['backupResources']
+    # src = args['backupResources']
     save_pth = args['saveResourcesPath']
+    q_ver = args['questionVersion']
+    src = './design-{}'.format(q_ver)
 
     _, sid = os.path.split(url)
     mkdir_new('./eyescreen_log')

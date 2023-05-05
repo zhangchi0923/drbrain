@@ -1,0 +1,4 @@
+2023-04-21 17:59:12,614 - root - INFO - Url data read successfully.
+2023-04-21 17:59:14,760 - root - INFO - Firefly plot succeed.
+2023-04-21 17:59:14,761 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2023 17:59:14] "[37mPOST /eye/train/firefly HTTP/1.1[0m" 200 -
+2023-04-21 17:59:40,086 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\pbb_score.py', reloading

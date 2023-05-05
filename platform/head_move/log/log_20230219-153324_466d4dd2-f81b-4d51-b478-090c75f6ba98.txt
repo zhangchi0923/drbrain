@@ -1,0 +1,18 @@
+2023-02-19 15:33:24,714 - root - INFO - Authorization succeed.
+2023-02-19 15:33:25,258 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\expressions.py', reloading
+2023-02-19 15:33:25,259 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\__pycache__\\expressions.cpython-38.pyc', reloading
+2023-02-19 15:33:25,260 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\check.py', reloading
+2023-02-19 15:33:25,262 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\__pycache__\\check.cpython-38.pyc', reloading
+2023-02-19 15:33:25,263 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__init__.py', reloading
+2023-02-19 15:33:25,264 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\__init__.cpython-38.pyc', reloading
+2023-02-19 15:33:25,265 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__config__.py', reloading
+2023-02-19 15:33:25,286 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\__config__.cpython-38.pyc', reloading
+2023-02-19 15:33:25,288 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\expressions.py', reloading
+2023-02-19 15:33:25,289 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\expressions.cpython-38.pyc', reloading
+2023-02-19 15:33:25,290 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\necompiler.py', reloading
+2023-02-19 15:33:25,292 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\necompiler.cpython-38.pyc', reloading
+2023-02-19 15:33:25,293 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\utils.py', reloading
+2023-02-19 15:33:25,295 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-02-19 15:33:25,295 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\utils.cpython-38.pyc', reloading
+2023-02-19 15:33:25,297 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\version.py', reloading
+2023-02-19 15:33:25,303 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\version.cpython-38.pyc', reloading

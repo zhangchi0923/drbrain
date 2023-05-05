@@ -1,0 +1,33 @@
+2023-04-21 17:51:31,044 - root - INFO - Authorization succeed.
+2023-04-21 17:51:33,430 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-04-21 17:51:33,514 - root - ERROR - [Errno 2] No such file or directory: './src_fig_pp/table@2x.png'
+Traceback (most recent call last):
+  File "e:\zc\GitProjects\algorithm-platform\platform\head_move\server.py", line 184, in pingpong
+    pp.traj_draw(data=raw_data)
+  File "e:\zc\GitProjects\algorithm-platform\platform\head_move\Pingpong.py", line 74, in traj_draw
+    self.traj_table(data, r_pth, w_pth)
+  File "e:\zc\GitProjects\algorithm-platform\platform\head_move\Pingpong.py", line 101, in traj_table
+    im = plt.imread(read_pth+'/table@2x.png')
+  File "D:\Anaconda3\lib\site-packages\matplotlib\pyplot.py", line 2246, in imread
+    return matplotlib.image.imread(fname, format)
+  File "D:\Anaconda3\lib\site-packages\matplotlib\image.py", line 1496, in imread
+    with img_open(fname) as image:
+  File "D:\Anaconda3\lib\site-packages\PIL\ImageFile.py", line 109, in __init__
+    self.fp = open(fp, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: './src_fig_pp/table@2x.png'
+2023-04-21 17:51:33,519 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2023 17:51:33] "[37mPOST /pingpong HTTP/1.1[0m" 200 -
+2023-04-21 17:55:35,178 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\BmpImagePlugin.py', reloading
+2023-04-21 17:55:35,179 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\BmpImagePlugin.cpython-38.pyc', reloading
+2023-04-21 17:55:35,181 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\GifImagePlugin.py', reloading
+2023-04-21 17:55:35,182 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\GifImagePlugin.cpython-38.pyc', reloading
+2023-04-21 17:55:35,184 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\JpegImagePlugin.py', reloading
+2023-04-21 17:55:35,186 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\JpegImagePlugin.cpython-38.pyc', reloading
+2023-04-21 17:55:35,188 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\TiffImagePlugin.py', reloading
+2023-04-21 17:55:35,189 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\TiffImagePlugin.cpython-38.pyc', reloading
+2023-04-21 17:55:35,192 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\fractions.py', reloading
+2023-04-21 17:55:35,193 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\__pycache__\\fractions.cpython-38.pyc', reloading
+2023-04-21 17:55:35,196 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\JpegPresets.py', reloading
+2023-04-21 17:55:35,197 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\JpegPresets.cpython-38.pyc', reloading
+2023-04-21 17:55:35,199 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\PpmImagePlugin.py', reloading
+2023-04-21 17:55:35,202 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\PpmImagePlugin.cpython-38.pyc', reloading
+2023-04-21 17:55:36,054 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2023 17:55:36] "[37mPOST /eye/train/firefly HTTP/1.1[0m" 200 -

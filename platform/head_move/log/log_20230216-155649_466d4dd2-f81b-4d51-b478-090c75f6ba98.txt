@@ -1,0 +1,9 @@
+2023-02-16 15:56:49,690 - root - INFO - Authorization succeed.
+2023-02-16 15:56:51,150 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-02-16 15:56:52,667 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\BmpImagePlugin.cpython-38.pyc', reloading
+2023-02-16 15:56:52,668 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\GifImagePlugin.cpython-38.pyc', reloading
+2023-02-16 15:56:52,670 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\JpegImagePlugin.cpython-38.pyc', reloading
+2023-02-16 15:56:52,672 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\TiffImagePlugin.cpython-38.pyc', reloading
+2023-02-16 15:56:52,673 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\__pycache__\\fractions.cpython-38.pyc', reloading
+2023-02-16 15:56:52,676 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\JpegPresets.cpython-38.pyc', reloading
+2023-02-16 15:56:52,679 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\__pycache__\\PpmImagePlugin.cpython-38.pyc', reloading
