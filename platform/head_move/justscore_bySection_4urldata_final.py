@@ -225,8 +225,6 @@ def deSpike(arr,threshold=1):
 def main(url,outputPth,designPth):
 
     mkdir_new(outputPth)
-    tmp , sid = os.path.split(url)
-    date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
     logger = None
     logger = logging.getLogger()
     logger.setLevel(level = logging.INFO)
@@ -236,11 +234,11 @@ def main(url,outputPth,designPth):
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
 
-    console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
+    # console = logging.StreamHandler()
+    # console.setLevel(logging.INFO)
 
     logger.addHandler(handler)
-    logger.addHandler(console)
+    # logger.addHandler(console)
 
 
     try:
