@@ -57,11 +57,9 @@ class EyeScreen(object):
         bez_x, bez_y = self.get_live_position(time/1000, time[0]/1000)
         model = self.corrModel(x, y, bez_x, bez_y)
         corr_x = np.corrcoef(x, bez_x, rowvar=False)[0, 1]; corr_y = np.corrcoef(y, bez_y, rowvar=False)[0, 1]
-        print(corr_x, corr_y)
         if corr_x < 0.9 or corr_y < 0.8:
             model.coef_ = np.array([[1,0],[0,1]])
             model.intercept_ = np.array([0,0])
-        print(model.coef_, model.intercept_)
         X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
         # print(X.shape)
         # print(model.predict(X))
