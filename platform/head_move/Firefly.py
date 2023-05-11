@@ -21,7 +21,7 @@ class Firefly:
         # plot two figures separately and save them without white spaces
         with plt.rc_context():
             import os
-            print(os.getcwd())
+            # print(os.getcwd())
             img = plt.imread('head_move/src_firefly/fire_fly_bg.png')
             plt.imshow(img, extent=[x.min(), x.max(), y.min(), y.max()], aspect='auto')
             plt.plot(x, y, color="red", linewidth=0.5)
