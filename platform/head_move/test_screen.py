@@ -1,11 +1,14 @@
 import requests
 import json
 import hashlib
+import os
 
 from settings import SALT
+
+
 def get_md5(d):
     d = dict(sorted(d.items()))
-    s=''
+    s = ''
     for k, v in d.items():
         s += str(k) + str(v)
     s = SALT + s
@@ -21,14 +24,15 @@ if __name__ == '__main__':
         "education": "高中",
         "url": "https://cos.drbrain.net/profile/tj/2023/4/3/81fadc7e-6d8e-4693-84ac-d9291175541e.txt",
         # "url": "https://cos.drbrain.net/profile/tj/2023/4/9/3d560422-bf7b-483d-9283-87ad0115d992.txt",
-        "backupResources": "/usr/local/project/algorithm/backup/utiles/design/",
-        "saveResourcesPath": "/usr/local/project/eye_image/y0001"
+        # "backupResources": "/usr/local/project/algorithm/backup/utiles/design/",
+        "questionVersion": 'B',
+        "saveResourcesPath": "./eyescreen_log/"
     }
     crypt2post = get_md5(data2post)
     with requests.post(
-        url='http://127.0.0.1:8101/eye/screen', 
-        data=json.dumps(data2post), 
-        headers={'Authorization':''.join(crypt2post)}
+        url='http://127.0.0.1:8101/eye/screen',
+        data=json.dumps(data2post),
+        headers={'Authorization': ''.join(crypt2post)}
     ) as r:
         print(r.text)
         print(r.status_code)

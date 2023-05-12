@@ -79,7 +79,7 @@ def balance():
         # log setting
         _, sid = os.path.split(url_h)
         # print(sid)
-        mkdir_new(out_path + './balance_log')
+        mkdir_new(out_path + '/log')
         logger = balancer.get_logger(sid, './balance_log')
         logger.info('Authorization succeed.')
         # requests to get data
@@ -244,14 +244,15 @@ def eye_screen():
     executer = ProcessPoolExecutor(1)
     executer.submit(draw_eye_screen, url, save_pth, src)
     logger.info('Eye screen plot submitted.')
+    # print(os.getcwd(), src, save_pth)
     results = calc_eye_screen(url, gender, education, age, save_pth, src, logger)
     logger.info('Eye screen results: {}'.format(results))
     return jsonify(results)
 
 def calc_eye_screen(url, gender, education, age, save_pth, src, logger):
     with requests.get(url) as r:
-        assert r.status_code == 200, 'HTTP Connection Error: {}, {}'.format(r.status_code, r.content)
-        logger.error("Cannot access url data!")
+        if r.status_code != 200 :
+            logger.error("Cannot access url data!")
         txt = r.text
     
     try:

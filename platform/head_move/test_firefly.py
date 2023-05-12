@@ -17,7 +17,7 @@ def get_md5(d):
 if __name__ == '__main__':
     data2post = {
         "url":  "https://cos.drbrain.net/profile/tj/2023/3/29/0626dfee-6bdd-4b48-af3e-d6545094d1d6.txt",
-        "savePath": './eye/train/firefly/test',
+        "savePath": './firefly_log/',
     }
     crypt2post = get_md5(data2post)
     with requests.post(

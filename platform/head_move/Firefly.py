@@ -22,7 +22,7 @@ class Firefly:
         with plt.rc_context():
             import os
             # print(os.getcwd())
-            img = plt.imread('head_move/src_firefly/fire_fly_bg.png')
+            img = plt.imread('./src_firefly/fire_fly_bg.png')
             plt.imshow(img, extent=[x.min(), x.max(), y.min(), y.max()], aspect='auto')
             plt.plot(x, y, color="red", linewidth=0.5)
             plt.axis('off')
@@ -34,7 +34,7 @@ class Firefly:
             k = gaussian_kde(np.vstack([x, y]))
             xi, yi = np.mgrid[x.min():x.max():x.size**0.5*1j,y.min():y.max():y.size**0.5*1j]
             zi = k(np.vstack([xi.flatten(), yi.flatten()]))
-            im = plt.imread('head_move/src_firefly/fire_fly_bg.png')
+            im = plt.imread('./src_firefly/fire_fly_bg.png')
             plt.imshow(im, extent=[x.min(), x.max(), y.min(), y.max()], aspect='auto')
             plt.contourf(xi, yi, zi.reshape(xi.shape), alpha=0.4, cmap='jet')
             plt.xlim(x.min(), x.max())
