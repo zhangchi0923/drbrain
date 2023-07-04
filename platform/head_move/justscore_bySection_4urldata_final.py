@@ -460,7 +460,8 @@ def main(url, outputPth, designPth):
                 plt.subplots_adjust(left=0.01, bottom=0.01,
                                     right=0.99, top=0.97)
                 # reading backgram photos with png format
-                img_en = plt.imread(str(designPth)+'en/en_'+str(level)+".png")
+                path = str(designPth)+'en/en_'+str(level)+".png"
+                img_en = plt.imread(path)
                 # location of canvas
                 plt.imshow(img_en, extent=[-3.84, 3.84, -2.16, 2.16])
                 plt.plot(x, y, 'r-', linewidth=0.5)
@@ -490,12 +491,12 @@ def main(url, outputPth, designPth):
 
 #
 if __name__ == "__main__":
-    # url = sys.argv[1]
-    # outputPth = sys.argv[2]
-    # designPth = sys.argv[3]
+    url = sys.argv[1]
+    outputPth = sys.argv[2]
+    designPth = sys.argv[3]
     # url = 'https://cos.drbrain.net/profile/tj/2022/8/19/5b894af5-5aee-4e47-be11-8d39516cc529.txt'
     # outputPth = r"E:\spyder_projects\drbrain\my_code\gaze_preprocessing\backup\figures\test_5b894af5-5aee-4e47-be11-8d39516cc529"
-    url = "https://cos.drbrain.net/profile/tj/2023/4/9/3d560422-bf7b-483d-9283-87ad0115d992.txt"
-    outputPth = "./eyescreen_log/"
-    designPth = './design-A/'
+    # url = "https://cos.drbrain.net/profile/tj/2023/4/9/3d560422-bf7b-483d-9283-87ad0115d992.txt"
+    # outputPth = "./eyescreen_log/"
+    # designPth = './design-A/'
     main(url, outputPth, designPth)
