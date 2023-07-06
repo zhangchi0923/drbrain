@@ -315,6 +315,11 @@ def firefly():
     logger = get_logger(sid, './firefly_log')
     try:
         df = pd.read_csv(url, index_col=0)
+        # 加了012字段，匹配新老版本机器
+        if df.shape[1] == 4:
+            df = df.loc[df.iloc[:, -1] == 0, ['timestamp', 'state', 'x']]
+            df.columns = ['state', 'x', 'y']
+
         logger.info('Url data read successfully.')
         firefly = Firefly(df, savePath)
         firefly.plot()
