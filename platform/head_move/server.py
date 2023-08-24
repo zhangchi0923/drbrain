@@ -355,7 +355,7 @@ def eye_pcat():
     res = {
         'code': 200,
         'body': {
-            'objects_urls': ['1', '2', '3']
+            'objectsUrls': ['1', '2', '3']
         }
     }
     return jsonify(res)
