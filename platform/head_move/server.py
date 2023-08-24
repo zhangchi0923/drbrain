@@ -332,7 +332,33 @@ def firefly():
     except Exception as e:
         logger.exception(e)
 
+@app.route('/eye/pcat', methods=['POST'])
+def eye_pcat():
+    '''
+    :param id: 筛查ID
+    :param type: 筛查类型
+    :param url: 眼动数据cos地址
+    :return code: 返回码 e.g.200, 404
+    :return objects_url: 对象存储地址列表
+    '''
+    args = request.get_json(force=True)
+    auth = request.headers.get('Authorization')
+    auth_srv = get_md5(args)
+    if auth_srv != auth:
+        return jsonify({
+            'code':401,
+            'msg':'Authorization failed.',
+            'body':None
+        })
+    id, type, url = args['url'], args['type'], args['url']
 
+    res = {
+        'code': 200,
+        'body': {
+            'objects_urls': ['1', '2', '3']
+        }
+    }
+    return jsonify(res)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8101, debug=True)
