@@ -89,10 +89,8 @@ class SymbolSearchDrawer(Drawer):
             self.save2cos(bio, client, key)
         return
     
-    def draw_and_save_cos(self, txt) -> list:
-        df = self.text2DF(txt)
-        executer = ProcessPoolExecutor(1)
-        executer.submit(self.async_draw, df)
+    def draw_and_save_cos(self) -> list:
+        
         cos_urls = []
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
@@ -131,10 +129,7 @@ class VocabularyDrawer(Drawer):
             self.save2cos(bio, client, key)
         return 
     
-    def draw_and_save_cos(self, txt) -> list:
-        df = self.text2DF(txt)
-        executer = ProcessPoolExecutor(1)
-        executer.submit(self.async_draw, df)
+    def draw_and_save_cos(self) -> list:
         cos_urls = []
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)

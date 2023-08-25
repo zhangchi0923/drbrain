@@ -366,7 +366,10 @@ def eye_pcat():
         elif type == "VOCABULARY_TEST":
             drawer = VocabularyDrawer(id, type)
         
-        objects_urls = drawer.draw_and_save_cos(txt)
+        df = drawer.text2DF(txt)
+        objects_urls = drawer.draw_and_save_cos()
+        executer = ProcessPoolExecutor(1)
+        executer.submit(drawer.async_draw, df)
         logger.info("PCAT Plot task submitted.")
         res = {
             'code': 200,
