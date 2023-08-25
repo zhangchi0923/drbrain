@@ -18,6 +18,7 @@ from Pingpong import Pingpong
 from Balance import Balancer
 from EyeScreen import EyeScreen
 from Firefly import Firefly
+from PCAT import VocabularyDrawer, SymbolSearchDrawer
 import pbb_score
 import warnings
 warnings.filterwarnings('ignore')
@@ -350,15 +351,41 @@ def eye_pcat():
             'msg':'Authorization failed.',
             'body':None
         })
-    id, type, url = args['url'], args['type'], args['url']
 
-    res = {
-        'code': 200,
-        'body': {
-            'objectsUrls': ['1', '2', '3']
+    id, type, url = args['id'], args['type'], args['url']
+    mkdir_new('./pcat_log')
+    _, sid = os.path.split(url)
+    logger = get_logger(sid, './pcat_log')
+    try:
+        with requests.get(url) as url_data:
+            assert url_data.status_code == 200, "Cannot access url data!"
+            txt = url_data.text
+        logger.info("Eye tracking data accessed.")
+        if type == "SYMBOL_SEARCH":
+            drawer = SymbolSearchDrawer(id, type)
+        elif type == "VOCABULARY_TEST":
+            drawer = VocabularyDrawer(id, type)
+        
+        logger.info("Plot task submitted.")
+        start_time = datetime.datetime.now()
+        objects_urls = drawer.draw_and_save_cos(txt)
+        end_time = datetime.datetime.now()
+        logger.info("Plot task completed in {} seconds".format((end_time-start_time).seconds))
+        res = {
+            'code': 200,
+            'body': {
+                'objectsUrls': objects_urls
+            },
+            'msg': 'success'
         }
-    }
-    return jsonify(res)
+        return jsonify(res)
+    except Exception as e:
+        logger.exception(str(e))
+        return jsonify({
+            'code':500, 
+            'body':{'objectsUrls': []}, 
+            'msg': str(e)
+        })
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8101, debug=True)

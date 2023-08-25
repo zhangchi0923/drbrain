@@ -45,5 +45,6 @@ MMSE_MODEL_PATH = './mmse_et_pipeline.pkl'
 SECRET_ID = "AKID31oRvG5YTDmANPrwQj4WuEQTNBoGmDRf"
 SECRET_KEY = "HOK5f5KWaTCj5GG5jCXjldKyY4PZYN1T"
 REGION = "ap-guangzhou"
-PREFIX = "profile/pcat/"
+URL_PREFIX = "https://cos.drbrain.net/"
+PREFIX = "profile/pcat/test"
 BUCKET_NAME = "product-c-formal-1254083048"
