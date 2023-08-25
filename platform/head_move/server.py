@@ -360,17 +360,14 @@ def eye_pcat():
         with requests.get(url) as url_data:
             assert url_data.status_code == 200, "Cannot access url data!"
             txt = url_data.text
-        logger.info("Eye tracking data accessed.")
+        logger.info("PCAT Eye tracking data accessed.")
         if type == "SYMBOL_SEARCH":
             drawer = SymbolSearchDrawer(id, type)
         elif type == "VOCABULARY_TEST":
             drawer = VocabularyDrawer(id, type)
         
-        logger.info("Plot task submitted.")
-        start_time = datetime.datetime.now()
         objects_urls = drawer.draw_and_save_cos(txt)
-        end_time = datetime.datetime.now()
-        logger.info("Plot task completed in {} seconds".format((end_time-start_time).seconds))
+        logger.info("PCAT Plot task submitted.")
         res = {
             'code': 200,
             'body': {

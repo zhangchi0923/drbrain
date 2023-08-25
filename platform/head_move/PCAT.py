@@ -1,3 +1,4 @@
+from concurrent.futures import ProcessPoolExecutor
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -33,6 +34,8 @@ class Drawer(object):
     返回一张图片的字节流
     '''
     def draw(self,) -> io.BytesIO: ...
+
+    def async_draw(self, df: pd.DataFrame): ...
     
     '''
     将一张图片的字节流上传cos
@@ -71,15 +74,12 @@ class SymbolSearchDrawer(Drawer):
         bio.seek(0)
         return bio
     
-    def draw_and_save_cos(self, txt) -> list:
-        cos_urls = []
-
+    def async_draw(self, df):
         config = CosConfig(Region=REGION, SecretId=SECRET_ID, SecretKey=SECRET_KEY, Token=None, Scheme="https")
         client = CosS3Client(config)
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
         base_key = '/'.join([PREFIX, year, month, day, str(self.id), self.type])
-        df = self.text2DF(txt)
         for i in range(1, self.img_num + 1):
             q_id = i
             x = df.loc[df['id'] == i, 'x']
@@ -87,6 +87,18 @@ class SymbolSearchDrawer(Drawer):
             bio = self.draw(q_id, x, y)
             key = base_key + '/{}.jpg'.format(i)
             self.save2cos(bio, client, key)
+        return
+    
+    def draw_and_save_cos(self, txt) -> list:
+        df = self.text2DF(txt)
+        executer = ProcessPoolExecutor(1)
+        executer.submit(self.async_draw, df)
+        cos_urls = []
+        now = datetime.datetime.now()
+        year, month, day = str(now.year), str(now.month), str(now.day)
+        base_key = '/'.join([PREFIX, year, month, day, str(self.id), self.type])
+        for i in range(1, self.img_num + 1):
+            key = base_key + '/{}.jpg'.format(i)
             cos_urls.append(URL_PREFIX + key)
         return cos_urls
     
@@ -104,15 +116,12 @@ class VocabularyDrawer(Drawer):
         bio.seek(0)
         return bio
     
-    def draw_and_save_cos(self, txt) -> list:
-        cos_urls = []
-
+    def async_draw(self, df):
         config = CosConfig(Region=REGION, SecretId=SECRET_ID, SecretKey=SECRET_KEY, Token=None, Scheme="https")
         client = CosS3Client(config)
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
         base_key = '/'.join([PREFIX, year, month, day, str(self.id), self.type])
-        df = self.text2DF(txt)
         for i in range(1, self.img_num + 1):
             q_id = i
             x = df.loc[df['id'] == i, 'x']
@@ -120,5 +129,17 @@ class VocabularyDrawer(Drawer):
             bio = self.draw(q_id, x, y)
             key = base_key + '/{}.jpg'.format(i)
             self.save2cos(bio, client, key)
+        return 
+    
+    def draw_and_save_cos(self, txt) -> list:
+        df = self.text2DF(txt)
+        executer = ProcessPoolExecutor(1)
+        executer.submit(self.async_draw, df)
+        cos_urls = []
+        now = datetime.datetime.now()
+        year, month, day = str(now.year), str(now.month), str(now.day)
+        base_key = '/'.join([PREFIX, year, month, day, str(self.id), self.type])
+        for i in range(1, self.img_num + 1):
+            key = base_key + '/{}.jpg'.format(i)
             cos_urls.append(URL_PREFIX + key)
         return cos_urls
