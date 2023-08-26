@@ -19,7 +19,7 @@ def get_md5(d):
 
 if __name__ == '__main__':
     data2post = {
-        "id":  8,
+        "id":  123,
         "type": 'SYMBOL_SEARCH',
         "url": "https://cos.drbrain.net/profile/tj/2023/8/25/49321be2-ae59-4d25-8372-95c4527da32d.txt",
     }

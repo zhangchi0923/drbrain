@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
  author: zhangchi
  email: zcsjtu0923@gmail.com
@@ -18,7 +16,7 @@ from Pingpong import Pingpong
 from Balance import Balancer
 from EyeScreen import EyeScreen
 from Firefly import Firefly
-from PCAT import VocabularyDrawer, SymbolSearchDrawer
+import PCAT
 import pbb_score
 import warnings
 warnings.filterwarnings('ignore')
@@ -360,16 +358,13 @@ def eye_pcat():
         with requests.get(url) as url_data:
             assert url_data.status_code == 200, "Cannot access url data!"
             txt = url_data.text
+            team, img_num = txt.strip().split('\n')[-1].split(',')[1:3]
         logger.info("PCAT Eye tracking data accessed.")
-        if type == "SYMBOL_SEARCH":
-            drawer = SymbolSearchDrawer(id, type)
-        elif type == "VOCABULARY_TEST":
-            drawer = VocabularyDrawer(id, type)
         
-        df = drawer.text2DF(txt)
-        objects_urls = drawer.draw_and_save_cos()
+        pcat = PCAT.Pcat(id, type, team, img_num)
+        objects_urls = pcat.make_cos_urls()
         executer = ProcessPoolExecutor(1)
-        executer.submit(drawer.async_draw, df)
+        executer.submit(draw_pcat, id, type, url)
         logger.info("PCAT Plot task submitted.")
         res = {
             'code': 200,
@@ -386,6 +381,9 @@ def eye_pcat():
             'body':{'objectsUrls': []}, 
             'msg': str(e)
         })
+
+def draw_pcat(id, type, url):
+    os.system('python ./pcat_draw.py {} {} {}'.format(id, type, url))
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8101, debug=True)
