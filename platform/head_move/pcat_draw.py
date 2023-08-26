@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import io, datetime
@@ -59,6 +60,15 @@ class Drawer(object):
             return True
         else:
             return False
+    
+    def despike(self, x, y, threshold=1):
+        dx = np.diff(x)
+        dy = np.diff(y)
+        idx_x = np.abs(dx) < threshold
+        idx_y = np.abs(dy) < threshold
+        idx = [True] + list(idx_x & idx_y)
+
+        return x[idx], y[idx]
 
 class SymbolSearchDrawer(Drawer):
     def __init__(self, id, type, txt):
@@ -67,7 +77,10 @@ class SymbolSearchDrawer(Drawer):
     def draw(self, q_id, x, y) -> io.BytesIO:
         img = plt.imread('./pcat-design/symbol/{}.png'.format(q_id))
         plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
-        plt.plot(x, y, 'r-', linewidth=0.5)
+        pos_x, pos_y = self.despike(x, y)
+        plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
+        plt.xlim(xmin = -3.84, xmax = 3.84)
+        plt.ylim(ymin = -2.16, ymax = 2.16)
         plt.axis('off')
         bio = io.BytesIO()
         plt.savefig(bio, format='jpg', dpi=200, bbox_inches='tight')
