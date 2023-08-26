@@ -77,13 +77,15 @@ class SymbolSearchDrawer(Drawer):
     def draw(self, q_id, x, y) -> io.BytesIO:
         img = plt.imread('./pcat-design/symbol/{}.png'.format(q_id))
         plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
-        pos_x, pos_y = self.despike(x, y)
-        plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
+        # pos_x, pos_y = self.despike(x, y)
+        # plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
+        plt.plot(x, y, 'r-', linewidth=0.5)
         plt.xlim(xmin = -3.84, xmax = 3.84)
         plt.ylim(ymin = -2.16, ymax = 2.16)
         plt.axis('off')
         bio = io.BytesIO()
         plt.savefig(bio, format='jpg', dpi=200, bbox_inches='tight')
+        plt.close()
         bio.seek(0)
         return bio
     
@@ -96,13 +98,15 @@ class VocabularyDrawer(Drawer):
     def draw(self, q_id, x, y) -> io.BytesIO:
         img = plt.imread('./pcat-design/vocab/{}/{}.png'.format(self.team, q_id))
         plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
-        pos_x, pos_y = self.despike(x, y)
-        plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
+        # pos_x, pos_y = self.despike(x, y)
+        # plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
+        plt.plot(x, y, 'r-', linewidth=0.5)
         plt.xlim(xmin = -3.84, xmax = 3.84)
         plt.ylim(ymin = -2.16, ymax = 2.16)
         plt.axis('off')
         bio = io.BytesIO()
         plt.savefig(bio, format='jpg', dpi=200, bbox_inches='tight')
+        plt.close()
         bio.seek(0)
         return bio
 
