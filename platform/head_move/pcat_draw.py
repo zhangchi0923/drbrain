@@ -29,9 +29,9 @@ class Drawer(object):
 
         df.dropna(how='any', axis=0, inplace=True)
         self.team = df['team'].iloc[-1]
-        self.img_num = df['id'].iloc[-1]
+        self.q_id_list = list(df.loc[df['team'] >=0, 'id'].unique())
         self.df = df
-        return
+        return df
     
     def draw(self): ...
 
@@ -41,12 +41,11 @@ class Drawer(object):
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
         base_key = '/'.join([PREFIX, year, month, day, str(self.id), self.type])
-        for i in range(1, self.img_num + 1):
-            q_id = i
-            x = self.df.loc[self.df['id'] == i, 'x']
-            y = self.df.loc[self.df['id'] == i, 'y']
+        for i, q_id in enumerate(self.q_id_list):
+            x = self.df.loc[self.df['id'] == q_id, 'x']
+            y = self.df.loc[self.df['id'] == q_id, 'y']
             bio = self.draw(q_id, x, y)
-            key = base_key + '/{}.jpg'.format(i)
+            key = base_key + '/{}.jpg'.format(i+1)
             self.save2cos(bio, client, key)
         return
     
@@ -110,6 +109,54 @@ class VocabularyDrawer(Drawer):
         bio.seek(0)
         return bio
 
+class PortraitDrawer(Drawer):
+    def __init__(self, id, type, txt):
+        super().__init__(id, type, txt)
+    
+    def draw(self, q_id, x, y) -> io.BytesIO:
+        img = plt.imread('./pcat-design/portrait/{}.png'.format(q_id))
+        plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
+        # pos_x, pos_y = self.despike(x, y)
+        # plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
+        plt.plot(x, y, 'r-', linewidth=0.5)
+        plt.xlim(xmin = -3.84, xmax = 3.84)
+        plt.ylim(ymin = -2.16, ymax = 2.16)
+        plt.axis('off')
+        bio = io.BytesIO()
+        plt.savefig(bio, format='jpg', dpi=200, bbox_inches='tight')
+        plt.close()
+        bio.seek(0)
+        return bio
+
+# TODO
+class SymmetryDrawer(Drawer):
+    def __init__(self, id, type, txt):
+        super().__init__(id, type, txt)
+    
+    def draw(self, q_id, x, y) -> io.BytesIO:
+
+        return
+
+class OrigamiDrawer(Drawer):
+    def __init__(self, id, type, txt):
+        super().__init__(id, type, txt)
+    
+    def draw(self, q_id, x, y) -> io.BytesIO:
+        img = plt.imread('./pcat-design/origami/{}/{}.png'.format(self.team, q_id))
+        plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
+        # pos_x, pos_y = self.despike(x, y)
+        # plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
+        plt.plot(x, y, 'r-', linewidth=0.5)
+        plt.xlim(xmin = -3.84, xmax = 3.84)
+        plt.ylim(ymin = -2.16, ymax = 2.16)
+        plt.axis('off')
+        bio = io.BytesIO()
+        plt.savefig(bio, format='jpg', dpi=200, bbox_inches='tight')
+        plt.close()
+        bio.seek(0)
+        return bio
+
+
 if __name__ == '__main__':
     id = sys.argv[1]
     type = sys.argv[2]
@@ -121,6 +168,10 @@ if __name__ == '__main__':
         drawer = SymbolSearchDrawer(id, type, txt)
     elif type == "VOCABULARY_TEST":
         drawer = VocabularyDrawer(id, type, txt)
+    elif type == "SYMMETRY_SPAN":
+        drawer = SymmetryDrawer(id, type, txt)
+    elif type == "PORTRAIT_MEMORY":
+        drawer = PortraitDrawer(id, type, txt)
     
     drawer.text2DF()
     drawer.async_draw()
