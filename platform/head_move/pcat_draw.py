@@ -172,6 +172,10 @@ if __name__ == '__main__':
         drawer = SymmetryDrawer(id, type, txt)
     elif type == "PORTRAIT_MEMORY":
         drawer = PortraitDrawer(id, type, txt)
+    elif type == "ORIGAMI_TEST":
+        drawer = OrigamiDrawer(id, type, txt)
+    # else:
+    #     raise TypeError("Unknown type args received: %s" % type)
     
     drawer.text2DF()
     drawer.async_draw()

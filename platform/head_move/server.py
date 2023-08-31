@@ -355,12 +355,6 @@ def eye_pcat():
     _, sid = os.path.split(url)
     logger = get_logger(sid, './pcat_log')
     try:
-        # with requests.get(url) as url_data:
-        #     assert url_data.status_code == 200, "Cannot access url data!"
-        #     txt = url_data.text
-        #     team, img_num = txt.strip().split('\n')[-1].split(',')[1:3]
-        # logger.info("PCAT Eye tracking data accessed.")
-        
         pcat = PCAT.Pcat(id, type, url)
         objects_urls = pcat.make_cos_urls()
         # executer = ProcessPoolExecutor(1)
@@ -377,6 +371,12 @@ def eye_pcat():
         return jsonify(res)
     except Exception as e:
         logger.exception(str(e))
+        if isinstance(e, AssertionError):
+            return jsonify({
+                'code': 503,
+                'body':{'objectsUrls': []},
+                'msg': str(e)
+            })
         return jsonify({
             'code':500, 
             'body':{'objectsUrls': []}, 

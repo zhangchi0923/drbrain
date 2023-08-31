@@ -19,11 +19,11 @@ def get_md5(d):
 
 if __name__ == '__main__':
     data2post = {
-        "id":  4,
-        "type": 'SYMBOL_SEARCH',
-        # "type": "PORTRAIT_MEMORY",
-        "url": "https://cos.drbrain.net/profile/tj/2023/8/25/49321be2-ae59-4d25-8372-95c4527da32d.txt", # symbol
-        # "url": "https://cos.drbrain.net/profile/tj/2023/8/30/32bfd502-1cfe-41bf-b6d3-4b19e729899d.txt", # portrait
+        "id":  8,
+        # "type": 'SYMBOL_SEARCH',
+        "type": "PORTRAIT_MEMORY",
+        # "url": "https://cos.drbrain.net/profile/tj/2023/8/25/49321be2-ae59-4d25-8372-95c4527da32d.txt", # symbol
+        "url": "https://cos.drbrain.net/profile/tj/2023/8/30/32bfd502-1cfe-41bf-b6d3-4b19e729899d.txt", # portrait
     }
     crypt2post = get_md5(data2post)
     with requests.post(
