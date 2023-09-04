@@ -357,8 +357,8 @@ def eye_pcat():
     try:
         pcat = PCAT.Pcat(id, type, url)
         objects_urls = pcat.make_cos_urls()
-        # executer = ProcessPoolExecutor(1)
-        executer = ThreadPoolExecutor(2)
+        executer = ProcessPoolExecutor(1)
+        # executer = ThreadPoolExecutor(2)
         executer.submit(draw_pcat, id, type, url)
         logger.info("PCAT Plot task submitted.")
         res = {
