@@ -371,7 +371,7 @@ def eye_pcat():
         return jsonify(res)
     except Exception as e:
         logger.exception(str(e))
-        if isinstance(e, AssertionError):
+        if isinstance(e, ConnectionError) or isinstance(e, KeyError):
             return jsonify({
                 'code': 503,
                 'body':{'objectsUrls': []},

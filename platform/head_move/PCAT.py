@@ -14,12 +14,12 @@ class Pcat(object):
         head = lines[0].split(',')
         arr = [x.split(',') for x in lines[1:] if not not x]
         df = pd.DataFrame(arr, columns=head)
-        df['timestamp'] = df['timestamp'].astype('uint64', errors='ignore')
+        df['timestamp'] = df['timestamp'].astype('uint64', errors='raise')
         df['timestamp'] = df['timestamp'] - df.loc[0, 'timestamp']
-        df['team'] = df['team'].astype(int, errors='ignore')
-        df['id'] = df['id'].astype(int, errors='ignore')
-        df['x'] = df['x'].astype(float, errors='ignore')
-        df['y'] = df['y'].astype(float, errors='ignore')
+        df['team'] = df['team'].astype(int, errors='raise')
+        df['id'] = df['id'].astype(int, errors='raise')
+        df['x'] = df['x'].astype(float, errors='raise')
+        df['y'] = df['y'].astype(float, errors='raise')
 
         df.dropna(how='any', axis=0, inplace=True)
         return df
@@ -36,9 +36,12 @@ class Pcat(object):
             return img_num
 
         except Exception as e:
-            if isinstance(e, AssertionError):
-                raise ConnectionError("Failed to get url data.")
-            return None
+            if isinstance(e, AssertionError) or isinstance(e, requests.ConnectionError):
+                raise ConnectionError("Error during fetching eye tracking url data.")
+            elif isinstance(e, KeyError):
+                raise KeyError("Mismatched eye tracking data columns!")
+            else:
+                raise e
     
     def make_cos_urls(self):
         img_num = self.get_url_and_img_num()
