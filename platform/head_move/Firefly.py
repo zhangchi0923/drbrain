@@ -16,12 +16,12 @@ class Firefly:
         self._savePath = savePath
     
     def plot(self):
-        x = self._df['x']
-        y = self._df['y']
+        x = self._df['pos_x']
+        y = self._df['pos_y']
         # plot two figures separately and save them without white spaces
         with plt.rc_context():
             import os
-            # print(os.getcwd())
+            print(os.getcwd())
             img = plt.imread('./src_firefly/fire_fly_bg.png')
             plt.imshow(img, extent=[x.min(), x.max(), y.min(), y.max()], aspect='auto')
             plt.plot(x, y, color="red", linewidth=0.5)

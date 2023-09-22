@@ -1,0 +1,30 @@
+import requests
+import json
+import hashlib
+
+from settings import SALT
+
+
+def get_md5(d):
+    d = dict(sorted(d.items()))
+    s = ''
+    for k, v in d.items():
+        s += str(k) + str(v)
+    s = SALT + s
+    md5 = hashlib.md5()
+    md5.update(s.encode("utf-8"))
+    return md5.hexdigest()
+
+
+if __name__ == '__main__':
+    data2post = {
+        "id":  3,
+        "url": "https://cos.drbrain.net/profile/tj/2023/9/20/a251b818-50e8-49b2-b3db-7992f6980307.txt", # symbol
+    }
+    crypt2post = get_md5(data2post)
+    with requests.post(
+        url='http://127.0.0.1:8101/rehab/sd/cervical',
+        data=json.dumps(data2post),
+        headers={'Authorization': ''.join(crypt2post)}
+    ) as r:
+        print(r.text)

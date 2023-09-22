@@ -48,3 +48,5 @@ REGION = "ap-guangzhou"
 URL_PREFIX = "https://cos.drbrain.net/"
 PREFIX = "profile/pcat/dev"
 BUCKET_NAME = "product-c-formal-1254083048"
+
+SD_PREFIX = "profile/sd-cervical/dev"

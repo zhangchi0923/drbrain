@@ -553,9 +553,9 @@ class Pingpong(object):
         x_center, y_center = 0, 0
         x_start, y_start = x_center, y_center+r
         
-        random.seed(int(data.loc[10000, 'handPosX']))
+        random.seed(0)
         range1 = abs(random.gauss(0, 1))
-        random.seed(int(data.loc[5000, 'handPosX']))
+        random.seed(1)
         range2 = abs(random.gauss(0, 1))
 
         alpha1 = 45 + 15*range1
@@ -617,9 +617,9 @@ class Pingpong(object):
         x_start, y_start = x_center, y_center+r
         
         import random
-        random.seed(int(data.loc[10000, 'handPosX']))
+        random.seed(0)
         range1 = abs(random.gauss(0, 1))
-        random.seed(int(data.loc[5000, 'handPosX']))
+        random.seed(1)
         range2 = abs(random.gauss(0, 1))
 
         alpha1 = 45 + 25*range1

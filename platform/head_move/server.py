@@ -17,6 +17,7 @@ from Balance import Balancer
 from EyeScreen import EyeScreen
 from Firefly import Firefly
 import PCAT
+from Cervical import Cervical
 import pbb_score
 import warnings
 warnings.filterwarnings('ignore')
@@ -385,6 +386,56 @@ def eye_pcat():
 
 def draw_pcat(id, type, url):
     os.system('python ./pcat_draw.py {} {} {}'.format(id, type, url))
+
+@app.route('/rehab/sd/cervical', methods=['POST'])
+def sd_cervical():
+    args = request.get_json(force=True)
+    auth = request.headers.get('Authorization')
+    auth_srv = get_md5(args)
+    if auth_srv != auth:
+        return jsonify({
+            'code':401,
+            'msg':'Authorization failed.',
+            'body':None
+        })
+
+    id, url = args['id'], args['url']
+    mkdir_new('./sd_cervical_log')
+    _, sid = os.path.split(url)
+    logger = get_logger(sid, './sd_cervical_log')
+    try:
+        sd_cervical = Cervical(url, id)
+        sd_cervical.get_url_data()
+        magnitudes = sd_cervical.get_magnitude()
+        json_keys = sd_cervical.get_vel_ang()
+        img_keys = sd_cervical.draw()
+
+        res = {
+            'code': 200,
+            'body': {
+                'magnitude': magnitudes,
+                'urls': {
+                    'img': img_keys,
+                    'vel': json_keys
+                }
+            },
+            'msg': 'success'
+        }
+        return jsonify(res)
+    except Exception as e:
+        logger.exception(str(e))
+        if isinstance(e, ConnectionError) or isinstance(e, KeyError):
+            return jsonify({
+                'code': 503,
+                'body':{'magnitude': []},
+                'msg': str(e)
+            })
+        return jsonify({
+            'code':500, 
+            'body':{'magnitude': []}, 
+            'msg': str(e)
+        })
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8101, debug=True)
