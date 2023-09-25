@@ -1,0 +1,40 @@
+2023-06-20 11:49:10,852 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-06-20 11:49:11,112 - root - INFO - -2.793
+2023-06-20 11:49:11,112 - root - INFO - corrcoef: 
+0.9817181545583858   0.9779883690723026
+2023-06-20 11:49:11,112 - root - INFO - regression coefficients:
+[[ 0.98902535 -0.10963473]
+ [-0.03037846  0.90503259]]
+2023-06-20 11:49:11,112 - root - INFO - regression intercept:
+[-0.02714035 -0.77552654]
+2023-06-20 11:49:11,112 - root - ERROR - Faild to open sklearn.txt from logger.error
+Traceback (most recent call last):
+  File "justscore_bySection_4urldata_final.py", line 391, in main
+    img = plt.imread(str(designPth)+"1.png")
+  File "D:\Anaconda3\lib\site-packages\matplotlib\pyplot.py", line 2246, in imread
+    return matplotlib.image.imread(fname, format)
+  File "D:\Anaconda3\lib\site-packages\matplotlib\image.py", line 1496, in imread
+    with img_open(fname) as image:
+  File "D:\Anaconda3\lib\site-packages\PIL\ImageFile.py", line 109, in __init__
+    self.fp = open(fp, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: './eyescreen_log/1.png'
+2023-06-20 11:50:47,103 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-06-20 11:50:47,343 - root - INFO - -2.793
+2023-06-20 11:50:47,343 - root - INFO - corrcoef: 
+0.9817181545583858   0.9779883690723026
+2023-06-20 11:50:47,359 - root - INFO - regression coefficients:
+[[ 0.98902535 -0.10963473]
+ [-0.03037846  0.90503259]]
+2023-06-20 11:50:47,359 - root - INFO - regression intercept:
+[-0.02714035 -0.77552654]
+2023-06-20 11:50:47,359 - root - ERROR - Faild to open sklearn.txt from logger.error
+Traceback (most recent call last):
+  File "justscore_bySection_4urldata_final.py", line 391, in main
+    img = plt.imread(str(designPth)+"1.png")
+  File "D:\Anaconda3\lib\site-packages\matplotlib\pyplot.py", line 2246, in imread
+    return matplotlib.image.imread(fname, format)
+  File "D:\Anaconda3\lib\site-packages\matplotlib\image.py", line 1496, in imread
+    with img_open(fname) as image:
+  File "D:\Anaconda3\lib\site-packages\PIL\ImageFile.py", line 109, in __init__
+    self.fp = open(fp, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: 'E:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\eyescreen_log1.png'
