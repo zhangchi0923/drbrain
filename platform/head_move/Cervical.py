@@ -24,7 +24,7 @@ class Cervical(object):
         except Exception as e:
             raise e
     
-    def get_magnitude(self) -> list:
+    def get_magnitude(self) -> dict:
         try:
             df_action_1 = self.df.loc[(self.df['level'] == 1) | (self.df['level'] == 2)].describe()
             ang_1 = int(df_action_1.loc['max', 'pitch'])
@@ -39,7 +39,10 @@ class Cervical(object):
             df_action_6 = self.df.loc[(self.df['level'] == 11) | (self.df['level'] == 12)].describe()
             ang_6 = int(df_action_6.loc['max', 'yaw'])
 
-            return [ang_1, ang_2, ang_3, ang_4, ang_5, ang_6]
+            angles = [ang_1, ang_2, ang_3, ang_4, ang_5, ang_6]
+            tags = ['forward', 'back', 'left', 'right', 'leftRot', 'rightRot']
+
+            return dict(zip(tags, angles))
         except Exception as e:
             raise e
     
@@ -132,7 +135,10 @@ class Cervical(object):
             key2 = URL_PREFIX + self._save_img2cos(bio2, client, base_key, 2)
             bio3 = self.draw3()
             key3 = URL_PREFIX + self._save_img2cos(bio3, client, base_key, 3)
-            return [key1, key2, key3]
+
+            tags = ['side', 'front', 'up']
+            keys = [key1, key2, key3]
+            return dict(zip(tags, keys))
         except Exception as e:
             raise e
 
@@ -152,6 +158,7 @@ class Cervical(object):
             raise e
     
     def _save_data2cos(self, bio, client, base_key, buffer_pos):
+        tmp_keys = []
         result_keys = []
         try:
             for i in range((len(buffer_pos))):
@@ -172,9 +179,13 @@ class Cervical(object):
                         Key=key,
                     )
                 
-                result_keys.append(URL_PREFIX + key)
+                tmp_keys.append(URL_PREFIX + key)
+                if len(tmp_keys) == 2:
+                    result_keys.append(dict(zip(['vel', 'angle'], tmp_keys)))
+                    tmp_keys = []
 
-            return result_keys
+            tags = ['forward', 'back', 'left', 'right', 'leftRot', 'rightRot']
+            return dict(zip(tags, result_keys))
         except Exception as e:
             raise e
     
