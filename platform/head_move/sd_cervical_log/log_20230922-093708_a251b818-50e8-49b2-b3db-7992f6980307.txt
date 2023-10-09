@@ -1,0 +1,29 @@
+2023-09-22 09:37:08,122 - root - ERROR - Invalid file path or buffer object type: <class 'int'>
+Traceback (most recent call last):
+  File "e:\zc\GitProjects\algorithm-platform\platform\head_move\server.py", line 408, in sd_cervical
+    sd_cervical.get_url_data()
+  File "e:\zc\GitProjects\algorithm-platform\platform\head_move\Cervical.py", line 25, in get_url_data
+    raise e
+  File "e:\zc\GitProjects\algorithm-platform\platform\head_move\Cervical.py", line 17, in get_url_data
+    df = pd.read_csv(self.url)
+  File "D:\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 610, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "D:\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 462, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "D:\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 819, in __init__
+    self._engine = self._make_engine(self.engine)
+  File "D:\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 1050, in _make_engine
+    return mapping[engine](self.f, **self.options)  # type: ignore[call-arg]
+  File "D:\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 1867, in __init__
+    self._open_handles(src, kwds)
+  File "D:\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 1362, in _open_handles
+    self.handles = get_handle(
+  File "D:\Anaconda3\lib\site-packages\pandas\io\common.py", line 558, in get_handle
+    ioargs = _get_filepath_or_buffer(
+  File "D:\Anaconda3\lib\site-packages\pandas\io\common.py", line 371, in _get_filepath_or_buffer
+    raise ValueError(msg)
+ValueError: Invalid file path or buffer object type: <class 'int'>
+2023-09-22 09:37:08,153 - werkzeug - INFO - 127.0.0.1 - - [22/Sep/2023 09:37:08] "[37mPOST /rehab/sd/cervical HTTP/1.1[0m" 200 -
+2023-09-22 09:38:00,238 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\server.py', reloading
+2023-09-22 09:38:00,239 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\server.py', reloading
+2023-09-22 09:38:00,239 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\server.py', reloading

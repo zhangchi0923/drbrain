@@ -1,0 +1,31 @@
+2023-09-22 09:38:19,481 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\expressions.py', reloading
+2023-09-22 09:38:19,481 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\__pycache__\\expressions.cpython-38.pyc', reloading
+2023-09-22 09:38:19,496 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\check.py', reloading
+2023-09-22 09:38:19,498 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\computation\\__pycache__\\check.cpython-38.pyc', reloading
+2023-09-22 09:38:19,499 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__init__.py', reloading
+2023-09-22 09:38:19,499 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\__init__.cpython-38.pyc', reloading
+2023-09-22 09:38:19,501 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__config__.py', reloading
+2023-09-22 09:38:19,502 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\__config__.cpython-38.pyc', reloading
+2023-09-22 09:38:19,505 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\expressions.py', reloading
+2023-09-22 09:38:19,506 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\expressions.cpython-38.pyc', reloading
+2023-09-22 09:38:19,507 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\necompiler.py', reloading
+2023-09-22 09:38:19,508 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\necompiler.cpython-38.pyc', reloading
+2023-09-22 09:38:19,509 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\utils.py', reloading
+2023-09-22 09:38:19,510 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\utils.cpython-38.pyc', reloading
+2023-09-22 09:38:19,510 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-09-22 09:38:19,512 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\version.py', reloading
+2023-09-22 09:38:19,512 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numexpr\\__pycache__\\version.cpython-38.pyc', reloading
+2023-09-22 09:38:19,583 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\apply.py', reloading
+2023-09-22 09:38:19,583 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\__pycache__\\apply.cpython-38.pyc', reloading
+2023-09-22 09:38:19,651 - qcloud_cos.cos_client - INFO - generate built-in connection pool success. maxsize=10,10
+2023-09-22 09:38:19,651 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/1.json ,headers=:{}
+2023-09-22 09:38:19,915 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/2.json ,headers=:{}
+2023-09-22 09:38:20,003 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/3.json ,headers=:{}
+2023-09-22 09:38:20,110 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/4.json ,headers=:{}
+2023-09-22 09:38:20,200 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/5.json ,headers=:{}
+2023-09-22 09:38:20,317 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/6.json ,headers=:{}
+2023-09-22 09:38:20,415 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/7.json ,headers=:{}
+2023-09-22 09:38:20,499 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/8.json ,headers=:{}
+2023-09-22 09:38:20,575 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/9.json ,headers=:{}
+2023-09-22 09:38:20,663 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/10.json ,headers=:{}
+2023-09-22 09:38:20,745 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/2/11.json ,headers=:{}

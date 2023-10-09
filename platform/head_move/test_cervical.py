@@ -18,8 +18,8 @@ def get_md5(d):
 
 if __name__ == '__main__':
     data2post = {
-        "id":  3,
-        "url": "https://cos.drbrain.net/profile/tj/2023/9/20/a251b818-50e8-49b2-b3db-7992f6980307.txt", # symbol
+        "id":  1,
+        "url": "https://cos.drbrain.net/profile/tj/2023/9/21/25efef47-caa6-4820-8617-4dac133c1231.txt", # symbol
     }
     crypt2post = get_md5(data2post)
     with requests.post(

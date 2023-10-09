@@ -1,0 +1,50 @@
+2023-09-25 14:03:31,200 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-09-25 14:03:31,380 - qcloud_cos.cos_client - INFO - generate built-in connection pool success. maxsize=10,10
+2023-09-25 14:03:31,380 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/1.json ,headers=:{}
+2023-09-25 14:03:31,615 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/2.json ,headers=:{}
+2023-09-25 14:03:31,703 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/3.json ,headers=:{}
+2023-09-25 14:03:31,783 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/4.json ,headers=:{}
+2023-09-25 14:03:31,868 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/5.json ,headers=:{}
+2023-09-25 14:03:31,954 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/6.json ,headers=:{}
+2023-09-25 14:03:32,031 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/7.json ,headers=:{}
+2023-09-25 14:03:32,418 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/8.json ,headers=:{}
+2023-09-25 14:03:32,484 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/9.json ,headers=:{}
+2023-09-25 14:03:32,559 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/10.json ,headers=:{}
+2023-09-25 14:03:32,663 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/11.json ,headers=:{}
+2023-09-25 14:03:32,743 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/12.json ,headers=:{}
+2023-09-25 14:03:33,420 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/1.jpg ,headers=:{}
+2023-09-25 14:03:34,030 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/2.jpg ,headers=:{}
+2023-09-25 14:03:34,654 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/3.jpg ,headers=:{}
+2023-09-25 14:03:34,747 - werkzeug - INFO - 127.0.0.1 - - [25/Sep/2023 14:03:34] "[37mPOST /rehab/sd/cervical HTTP/1.1[0m" 200 -
+2023-09-25 14:04:32,897 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\gunicorn_conf.py', reloading
+2023-09-25 14:04:32,897 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\gunicorn_conf.py', reloading
+2023-09-25 14:04:33,359 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numpy\\core\\tests\\__init__.py', reloading
+2023-09-25 14:04:33,371 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numpy\\lib\\tests\\__init__.py', reloading
+2023-09-25 14:04:33,380 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numpy\\matrixlib\\tests\\__init__.py', reloading
+2023-09-25 14:04:33,433 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\numpy\\testing\\_private\\__init__.py', reloading
+2023-09-25 14:04:33,435 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pytest\\__init__.py', reloading
+2023-09-25 14:04:33,441 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\cacheprovider.py', reloading
+2023-09-25 14:04:33,442 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\pathlib.py', reloading
+2023-09-25 14:04:33,444 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\reports.py', reloading
+2023-09-25 14:04:33,453 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\__init__.py', reloading
+2023-09-25 14:04:33,457 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\nodes.py', reloading
+2023-09-25 14:04:33,461 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\_io\\__init__.py', reloading
+2023-09-25 14:04:33,463 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\compat.py', reloading
+2023-09-25 14:04:33,464 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\config\\__init__.py', reloading
+2023-09-25 14:04:33,465 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\config\\argparsing.py', reloading
+2023-09-25 14:04:33,466 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\deprecated.py', reloading
+2023-09-25 14:04:33,467 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\fixtures.py', reloading
+2023-09-25 14:04:33,469 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\main.py', reloading
+2023-09-25 14:04:33,469 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\python.py', reloading
+2023-09-25 14:04:33,471 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\warning_types.py', reloading
+2023-09-25 14:04:33,475 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\capture.py', reloading
+2023-09-25 14:04:33,479 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\outcomes.py', reloading
+2023-09-25 14:04:33,480 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\_code\\code.py', reloading
+2023-09-25 14:04:33,482 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\python_api.py', reloading
+2023-09-25 14:04:33,483 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\store.py', reloading
+2023-09-25 14:04:33,484 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\terminal.py', reloading
+2023-09-25 14:04:33,488 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\logging.py', reloading
+2023-09-25 14:04:33,492 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\monkeypatch.py', reloading
+2023-09-25 14:04:33,498 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\recwarn.py', reloading
+2023-09-25 14:04:33,504 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\_pytest\\tmpdir.py', reloading
+2023-09-25 14:04:33,516 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pytest\\collect.py', reloading

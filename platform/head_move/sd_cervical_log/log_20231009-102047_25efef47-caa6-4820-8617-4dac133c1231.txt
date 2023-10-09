@@ -1,0 +1,13 @@
+2023-10-09 10:20:47,879 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-10-09 10:20:47,967 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\apply.py', reloading
+2023-10-09 10:20:47,967 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\pandas\\core\\__pycache__\\apply.cpython-38.pyc', reloading
+2023-10-09 10:20:48,043 - qcloud_cos.cos_client - INFO - generate built-in connection pool success. maxsize=10,10
+2023-10-09 10:20:48,044 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/1.json ,headers=:{}
+2023-10-09 10:20:48,285 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/2.json ,headers=:{}
+2023-10-09 10:20:48,378 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/3.json ,headers=:{}
+2023-10-09 10:20:48,472 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/4.json ,headers=:{}
+2023-10-09 10:20:48,566 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/5.json ,headers=:{}
+2023-10-09 10:20:48,644 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/6.json ,headers=:{}
+2023-10-09 10:20:48,738 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/7.json ,headers=:{}
+2023-10-09 10:20:48,818 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/8.json ,headers=:{}
+2023-10-09 10:20:48,912 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/10/9/1/9.json ,headers=:{}

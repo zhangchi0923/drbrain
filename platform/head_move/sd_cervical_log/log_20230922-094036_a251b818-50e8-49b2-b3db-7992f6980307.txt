@@ -1,0 +1,20 @@
+2023-09-22 09:40:36,735 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-09-22 09:40:36,875 - qcloud_cos.cos_client - INFO - generate built-in connection pool success. maxsize=10,10
+2023-09-22 09:40:36,875 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/1.json ,headers=:{}
+2023-09-22 09:40:37,113 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/2.json ,headers=:{}
+2023-09-22 09:40:37,206 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/3.json ,headers=:{}
+2023-09-22 09:40:37,300 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/4.json ,headers=:{}
+2023-09-22 09:40:37,378 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/5.json ,headers=:{}
+2023-09-22 09:40:37,458 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/6.json ,headers=:{}
+2023-09-22 09:40:37,536 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/7.json ,headers=:{}
+2023-09-22 09:40:37,626 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/8.json ,headers=:{}
+2023-09-22 09:40:37,711 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/9.json ,headers=:{}
+2023-09-22 09:40:37,786 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/10.json ,headers=:{}
+2023-09-22 09:40:37,855 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/11.json ,headers=:{}
+2023-09-22 09:40:37,936 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/12.json ,headers=:{}
+2023-09-22 09:40:38,532 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/1.jpg ,headers=:{}
+2023-09-22 09:40:39,102 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/2.jpg ,headers=:{}
+2023-09-22 09:40:39,710 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/22/3/3.jpg ,headers=:{}
+2023-09-22 09:40:39,788 - werkzeug - INFO - 127.0.0.1 - - [22/Sep/2023 09:40:39] "[37mPOST /rehab/sd/cervical HTTP/1.1[0m" 200 -
+2023-09-22 09:41:49,492 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\test_cervical.py', reloading
+2023-09-22 09:41:49,492 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\test_cervical.py', reloading

@@ -58,6 +58,7 @@ class Cervical(object):
         df_action['timestamp'] = (df_action['timestamp'] - df_action['timestamp'].min())/1000
         diff = df_action[['timestamp', 'x', 'y', 'z']].diff()
         df_action['vel'] = diff.apply(lambda x: vel(x), axis=1)
+        df_action['vel'] = df_action['vel'].rolling(35, center=False).mean()
         df_action['vel'].fillna(0, inplace=True)
         df_action[['timestamp', 'vel']].to_json(bio, orient='values')
         buffer_pos.append(bio.tell())
@@ -69,6 +70,7 @@ class Cervical(object):
         df_action['timestamp'] = (df_action['timestamp'] - df_action['timestamp'].min())/1000
         diff = df_action[['timestamp', 'x', 'y', 'z']].diff()
         df_action['vel'] = diff.apply(lambda x: vel(x), axis=1)
+        df_action['vel'] = df_action['vel'].rolling(35, center=False).mean()
         df_action['vel'].fillna(0, inplace=True)
         df_action[['timestamp', 'vel']].to_json(bio, orient='values')
         buffer_pos.append(bio.tell())
@@ -79,6 +81,7 @@ class Cervical(object):
         df_action['timestamp'] = (df_action['timestamp'] - df_action['timestamp'].min())/1000
         diff = df_action[['timestamp', 'x', 'y', 'z']].diff()
         df_action['vel'] = diff.apply(lambda x: vel(x), axis=1)
+        df_action['vel'] = df_action['vel'].rolling(35, center=False).mean()
         df_action['vel'].fillna(0, inplace=True)
         df_action[['timestamp', 'vel']].to_json(bio, orient='values')
         buffer_pos.append(bio.tell())
@@ -90,6 +93,7 @@ class Cervical(object):
         df_action['timestamp'] = (df_action['timestamp'] - df_action['timestamp'].min())/1000
         diff = df_action[['timestamp', 'x', 'y', 'z']].diff()
         df_action['vel'] = diff.apply(lambda x: vel(x), axis=1)
+        df_action['vel'] = df_action['vel'].rolling(35, center=False).mean()
         df_action['vel'].fillna(0, inplace=True)
         df_action[['timestamp', 'vel']].to_json(bio, orient='values')
         buffer_pos.append(bio.tell())
@@ -101,6 +105,7 @@ class Cervical(object):
         df_action['timestamp'] = (df_action['timestamp'] - df_action['timestamp'].min())/1000
         diff = df_action[['timestamp', 'x', 'y', 'z']].diff()
         df_action['vel'] = diff.apply(lambda x: vel(x), axis=1)
+        df_action['vel'] = df_action['vel'].rolling(35, center=False).mean()
         df_action['vel'].fillna(0, inplace=True)
         df_action[['timestamp', 'vel']].to_json(bio, orient='values')
         buffer_pos.append(bio.tell())
@@ -111,6 +116,7 @@ class Cervical(object):
         df_action['timestamp'] = (df_action['timestamp'] - df_action['timestamp'].min())/1000
         diff = df_action[['timestamp', 'x', 'y', 'z']].diff()
         df_action['vel'] = diff.apply(lambda x: vel(x), axis=1)
+        df_action['vel'] = df_action['vel'].rolling(35, center=False).mean()
         df_action['vel'].fillna(0, inplace=True)
         df_action[['timestamp', 'vel']].to_json(bio, orient='values')
         buffer_pos.append(bio.tell())
