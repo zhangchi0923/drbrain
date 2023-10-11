@@ -1,0 +1,26 @@
+name: Deployment on dev server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: pull code
+        uses: appleboy/ssh-action@master
+        env:
+          SERVER_WORKDIR: ${{secrets.SERVER_WORKDIR}}
+        with:
+          host: ${{secrets.SERVER_HOST}}
+          username: ${{secrets.SERVER_USERNAME}}
+          key: ${{secrets.SERVER_KEY}}
+          envs: SERVER_WORKDIR
+
+          script:
+            cd $SERVER_WORKDIR
+            git checkout .
+            git pull
