@@ -23,7 +23,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from flask import Flask, request, jsonify
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, wait, ALL_COMPLETED
+from concurrent.futures import ProcessPoolExecutor
 
 app = Flask(__name__)
 
