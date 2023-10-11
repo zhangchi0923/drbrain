@@ -20,7 +20,9 @@ jobs:
           key: ${{secrets.SERVER_KEY}}
           envs: SERVER_WORKDIR
 
+          script_stop: true
           script:
             cd $SERVER_WORKDIR
+            echo "hello this server"
             git checkout .
             git pull
