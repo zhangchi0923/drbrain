@@ -79,7 +79,6 @@ def balance():
         mkdir_new(out_path + '/log')
         logger = balancer.get_logger(sid, '../balance_log')
         logger.info('Authorization succeed.')
-        # requests to get data
         with requests.get(url_h) as url_data:
             if url_data.status_code != 200:
                 logger.error("Cannot access url data!")
