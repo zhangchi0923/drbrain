@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
  author: zhangchi
  email: zcsjtu0923@gmail.com
@@ -14,21 +12,23 @@ import hashlib
 import logging
 import datetime
 import pandas as pd
-from Pingpong import Pingpong
-from Balance import Balancer
-from EyeScreen import EyeScreen
-from Firefly import Firefly
-import pbb_score
+from utils.Pingpong import Pingpong
+from utils.Balance import Balancer
+from utils.EyeScreen import EyeScreen
+from utils.Firefly import Firefly
+import utils.PCAT as PCAT
+from utils.Cervical import Cervical
+import utils.pbb_score as pbb_score
 import warnings
 warnings.filterwarnings('ignore')
 
 from flask import Flask, request, jsonify
-from concurrent.futures import ProcessPoolExecutor, wait, ALL_COMPLETED
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, wait, ALL_COMPLETED
 
 app = Flask(__name__)
 
 # utils function
-from settings import SALT, RESOURCE_PATH
+from config.settings import SALT, RESOURCE_PATH
 def get_md5(d):
     d = dict(sorted(d.items()))
     s=''
@@ -80,7 +80,7 @@ def balance():
         _, sid = os.path.split(url_h)
         # print(sid)
         mkdir_new(out_path + '/log')
-        logger = balancer.get_logger(sid, './balance_log')
+        logger = balancer.get_logger(sid, '../balance_log')
         logger.info('Authorization succeed.')
         # requests to get data
         with requests.get(url_h) as url_data:
@@ -96,33 +96,33 @@ def balance():
 
         mkdir_new(out_path + '/result_fig')
         for n in [1, 2, 3]:
-            balancer.draw_sav(txt_head_data, mode, n, './src_fig/', out_path+'/result_fig/'+"traj{}.png".format(n))
+            balancer.draw_sav(txt_head_data, mode, n, './assets/src_fig/', out_path+'/result_fig/'+"traj{}.png".format(n))
             logger.info("traj{} completed.".format(n))
         vel_list = balancer.calc_vel(txt_head_data)
         with open(out_path+'/vel.json', 'w') as f:
             json.dump(vel_list, f)
 
-        out_dict = {'code':200,
-                    'msg':'Computation completed successfully.',
-                    'body':{
-                        'forth': '{:.2f}'.format(des_head_data.loc['max', 'pos_y']), 
-                        'back': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_y'])), 
-                        'left': '{:.2f}'.format(des_head_data.loc['max', 'pos_x']), 
-                        'right': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_x'])), 
-                        'up': '{:.2f}'.format(des_head_data.loc['max', 'pos_z']), 
-                        'down': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_z'])),
-                        
-                        'rightForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 1]*100), 
-                        'leftForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 2]*100), 
-                        'leftBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 3]*100),
-                        'rightBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 4]*100),
-                        
-                        'rightForthPct': '{:.2f}%'.format(train_res.loc['rate', 1]*100), 
-                        'leftForthPct': '{:.2f}%'.format(train_res.loc['rate', 2]*100), 
-                        'leftBackPct': '{:.2f}%'.format(train_res.loc['rate', 3]*100),
-                        'rightBackPct': '{:.2f}%'.format(train_res.loc['rate', 4]*100)
-
-                    }          
+        out_dict = {
+            'code':200,
+            'msg':'Computation completed successfully.',
+            'body':{
+                'forth': '{:.2f}'.format(des_head_data.loc['max', 'pos_y']), 
+                'back': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_y'])), 
+                'left': '{:.2f}'.format(des_head_data.loc['max', 'pos_x']), 
+                'right': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_x'])), 
+                'up': '{:.2f}'.format(des_head_data.loc['max', 'pos_z']), 
+                'down': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_z'])),
+                
+                'rightForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 1]*100), 
+                'leftForthSuc': '{:.2f}%'.format(train_res.loc['succeed', 2]*100), 
+                'leftBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 3]*100),
+                'rightBackSuc': '{:.2f}%'.format(train_res.loc['succeed', 4]*100),
+                
+                'rightForthPct': '{:.2f}%'.format(train_res.loc['rate', 1]*100), 
+                'leftForthPct': '{:.2f}%'.format(train_res.loc['rate', 2]*100), 
+                'leftBackPct': '{:.2f}%'.format(train_res.loc['rate', 3]*100),
+                'rightBackPct': '{:.2f}%'.format(train_res.loc['rate', 4]*100)
+            }
         }
 
         logger.info("Velocity calculated.")
@@ -169,8 +169,8 @@ def pingpong():
         # log setting
         _, sid = os.path.split(url)
         # print(sid)
-        mkdir_new('./pingpong_log')
-        logger = pp.get_logger(sid, './pingpong_log')
+        mkdir_new('./log/pingpong_log')
+        logger = pp.get_logger(sid, './log/pingpong_log')
         logger.info('Authorization succeed.')
         # requests to get data
         with requests.get(url) as url_data:
@@ -234,11 +234,11 @@ def eye_screen():
     # src = args['backupResources']
     save_pth = args['saveResourcesPath']
     q_ver = args['questionVersion']
-    src = './design-{}/'.format(q_ver)
+    src = './assets/design-{}/'.format(q_ver)
 
     _, sid = os.path.split(url)
-    mkdir_new('./eyescreen_log')
-    logger = get_logger(sid, './eyescreen_log')
+    mkdir_new('./log/eyescreen_log')
+    logger = get_logger(sid, './log/eyescreen_log')
     logger.info('Authorization succeed.')
 
     executer = ProcessPoolExecutor(1)
@@ -291,7 +291,7 @@ def calc_eye_screen(url, gender, education, age, save_pth, src, logger):
     return results
 
 def draw_eye_screen(url, out_pth, design_pth):
-    os.system('python ./justscore_bySection_4urldata_final.py {} {} {}'.format(url, out_pth, design_pth))
+    os.system('python ./utils/justscore_bySection_4urldata_final.py {} {} {}'.format(url, out_pth, design_pth))
 
 # create app 'eye/train/firefly' with POST method. Related class was created in eye/train/Firefly.py
 @app.route('/eye/train/firefly', methods=['POST'])
@@ -311,8 +311,8 @@ def firefly():
     mkdir_new(savePath)
 
     _, sid = os.path.split(url)
-    mkdir_new('./firefly_log')
-    logger = get_logger(sid, './firefly_log')
+    mkdir_new('./log/firefly_log')
+    logger = get_logger(sid, './log/firefly_log')
     try:
         df = pd.read_csv(url, index_col=0)
         # 加了012字段，匹配新老版本机器
@@ -331,6 +331,11 @@ def firefly():
         })
     except Exception as e:
         logger.exception(e)
+        return jsonify({
+            'code': 500,
+            'msg': e,
+            'body': None
+        })
 
 @app.route('/eye/pcat', methods=['POST'])
 def eye_pcat():
@@ -350,15 +355,91 @@ def eye_pcat():
             'msg':'Authorization failed.',
             'body':None
         })
-    id, type, url = args['url'], args['type'], args['url']
 
-    res = {
-        'code': 200,
-        'body': {
-            'objects_urls': ['1', '2', '3']
+    id, type, url = args['id'], args['type'], args['url']
+    mkdir_new('./log/pcat_log')
+    _, sid = os.path.split(url)
+    logger = get_logger(sid, './log/pcat_log')
+    try:
+        pcat = PCAT.Pcat(id, type, url)
+        objects_urls = pcat.make_cos_urls()
+        executer = ProcessPoolExecutor(1)
+        # executer = ThreadPoolExecutor(2)
+        executer.submit(draw_pcat, id, type, url)
+        logger.info("PCAT Plot task submitted.")
+        res = {
+            'code': 200,
+            'body': {
+                'objectsUrls': objects_urls
+            },
+            'msg': 'success'
         }
-    }
-    return jsonify(res)
+        return jsonify(res)
+    except Exception as e:
+        logger.exception(str(e))
+        if isinstance(e, ConnectionError) or isinstance(e, KeyError):
+            return jsonify({
+                'code': 503,
+                'body':{'objectsUrls': []},
+                'msg': str(e)
+            })
+        return jsonify({
+            'code':500, 
+            'body':{'objectsUrls': []}, 
+            'msg': str(e)
+        })
+
+def draw_pcat(id, type, url):
+    os.system('python ./utils/pcat_draw.py {} {} {}'.format(id, type, url))
+
+@app.route('/rehab/sd/cervical', methods=['POST'])
+def sd_cervical():
+    args = request.get_json(force=True)
+    auth = request.headers.get('Authorization')
+    auth_srv = get_md5(args)
+    if auth_srv != auth:
+        return jsonify({
+            'code':401,
+            'msg':'Authorization failed.',
+            'body':None
+        })
+
+    id, url = args['id'], args['url']
+    mkdir_new('./log/sd_cervical_log')
+    _, sid = os.path.split(url)
+    logger = get_logger(sid, './log/sd_cervical_log')
+    try:
+        sd_cervical = Cervical(url, id)
+        sd_cervical.get_url_data()
+        magnitudes = sd_cervical.get_magnitude()
+        json_keys = sd_cervical.get_vel_ang()
+        img_keys = sd_cervical.draw()
+
+        res = {
+            'code': 200,
+            'body': {
+                'magnitude': magnitudes,
+                'urls': {
+                    'img': img_keys,
+                    'vel': json_keys
+                }
+            },
+            'msg': 'success'
+        }
+        return jsonify(res)
+    except Exception as e:
+        logger.exception(str(e))
+        if isinstance(e, ConnectionError) or isinstance(e, KeyError):
+            return jsonify({
+                'code': 503,
+                'body':{'magnitude': []},
+                'msg': str(e)
+            })
+        return jsonify({
+            'code':500, 
+            'body':{'magnitude': []}, 
+            'msg': str(e)
+        })
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8101, debug=True)

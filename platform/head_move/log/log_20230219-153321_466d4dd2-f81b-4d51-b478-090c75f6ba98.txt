@@ -1,1 +1,0 @@
-2023-02-19 15:33:21,597 - root - INFO - Authorization succeed.

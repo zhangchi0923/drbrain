@@ -1,0 +1,23 @@
+2023-09-25 11:12:00,982 - numexpr.utils - INFO - NumExpr defaulting to 4 threads.
+2023-09-25 11:12:01,134 - qcloud_cos.cos_client - INFO - generate built-in connection pool success. maxsize=10,10
+2023-09-25 11:12:01,134 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/1.json ,headers=:{}
+2023-09-25 11:12:01,380 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/2.json ,headers=:{}
+2023-09-25 11:12:01,496 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/3.json ,headers=:{}
+2023-09-25 11:12:01,592 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/4.json ,headers=:{}
+2023-09-25 11:12:01,683 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/5.json ,headers=:{}
+2023-09-25 11:12:01,774 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/6.json ,headers=:{}
+2023-09-25 11:12:01,878 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/7.json ,headers=:{}
+2023-09-25 11:12:01,994 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/8.json ,headers=:{}
+2023-09-25 11:12:02,082 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/9.json ,headers=:{}
+2023-09-25 11:12:02,174 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/10.json ,headers=:{}
+2023-09-25 11:12:02,265 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/11.json ,headers=:{}
+2023-09-25 11:12:02,394 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/12.json ,headers=:{}
+2023-09-25 11:12:02,966 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\BmpImagePlugin.py', reloading
+2023-09-25 11:12:02,969 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\GifImagePlugin.py', reloading
+2023-09-25 11:12:02,970 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\JpegImagePlugin.py', reloading
+2023-09-25 11:12:02,971 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\TiffImagePlugin.py', reloading
+2023-09-25 11:12:02,975 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\fractions.py', reloading
+2023-09-25 11:12:02,978 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\JpegPresets.py', reloading
+2023-09-25 11:12:02,979 - werkzeug - INFO -  * Detected change in 'D:\\Anaconda3\\Lib\\site-packages\\PIL\\PpmImagePlugin.py', reloading
+2023-09-25 11:12:03,097 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/1.jpg ,headers=:{}
+2023-09-25 11:12:03,722 - qcloud_cos.cos_client - INFO - put object, url=:https://product-c-formal-1254083048.cos.ap-guangzhou.myqcloud.com/profile/sd-cervical/dev/2023/9/25/2/2.jpg ,headers=:{}
