@@ -148,7 +148,6 @@ def pingpong():
     auth = request.headers.get('Authorization')
     auth_srv = get_md5(args)
     if auth_srv != auth:
-        # logger.error('Authorization failed.\nAuth from client:{}\nAuth from server:{}'.format(auth, auth_srv))
         return jsonify({
             'code':401,
             'msg':'Authorization failed.',
