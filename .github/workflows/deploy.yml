@@ -23,6 +23,10 @@ jobs:
           script_stop: true
           script: |
             cd $SERVER_WORKDIR
-            echo "hello this server"
+            echo "pulling code from remote..."
             git checkout .
             git pull github main
+            echo "pulling completed successfully."
+            kill -HUP 10973
+            echo "service restarted successfully."
+          
