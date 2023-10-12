@@ -25,4 +25,4 @@ jobs:
             cd $SERVER_WORKDIR
             echo "hello this server"
             git checkout .
-            git pull
+            git pull github main
