@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: pull code
+      - name: pull code and restart service
         uses: appleboy/ssh-action@master
         env:
           SERVER_WORKDIR: ${{secrets.SERVER_WORKDIR}}
