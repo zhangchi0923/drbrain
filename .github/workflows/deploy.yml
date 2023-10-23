@@ -27,6 +27,6 @@ jobs:
             git checkout .
             git pull github main
             echo "pulling completed successfully."
-            kill -HUP 10973
+            kill -HUP 20504
             echo "service restarted successfully."
           

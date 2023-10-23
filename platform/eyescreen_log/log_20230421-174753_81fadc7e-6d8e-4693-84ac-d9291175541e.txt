@@ -1,7 +1,0 @@
-2023-04-21 17:47:53,720 - root - INFO - Authorization succeed.
-2023-04-21 17:47:53,728 - root - INFO - Eye screen plot submitted.
-2023-04-21 17:47:53,835 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2023 17:47:53] "[35m[1mPOST /eye/screen HTTP/1.1[0m" 500 -
-2023-04-21 17:47:54,121 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\test_firefly.py', reloading
-2023-04-21 17:47:54,154 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\draw_head_movements.py', reloading
-2023-04-21 17:47:54,161 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\test.py', reloading
-2023-04-21 17:47:54,179 - werkzeug - INFO -  * Detected change in 'e:\\zc\\GitProjects\\algorithm-platform\\platform\\head_move\\test_pingpong.py', reloading
