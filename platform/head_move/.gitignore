@@ -1,4 +1,3 @@
-__pycache__/
 log/
 sd_cervical_log/
 pp_result_fig/
@@ -9,3 +8,4 @@ mmse_et_pipeline.pkl
 moca_et_pipeline.pkl
 screen.ipynb
 .vscode
+__pycache__
