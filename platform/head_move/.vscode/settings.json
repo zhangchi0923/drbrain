@@ -1,5 +1,0 @@
-{
-    "yaml.schemas": {
-        "https://json.schemastore.org/github-workflow.json": "file:///e%3A/zc/GitProjects/algorithm-platform/.github/workflows/deploy.yml"
-    }
-}
