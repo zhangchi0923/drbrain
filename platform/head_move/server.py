@@ -74,14 +74,14 @@ def balance():
     mode = args['mode']
 
     balancer = Balancer(out_path, mode)
+    # log setting
+    _, sid = os.path.split(url_h)
+    # print(sid)
+    mkdir_new(out_path + '/log')
+    logger = balancer.get_logger(sid, out_path)
+    logger.info('Authorization succeed.')
 
     try:
-        # log setting
-        _, sid = os.path.split(url_h)
-        # print(sid)
-        mkdir_new(out_path + '/log')
-        logger = balancer.get_logger(sid, '../balance_log')
-        logger.info('Authorization succeed.')
         # requests to get data
         with requests.get(url_h) as url_data:
             if url_data.status_code != 200:
@@ -92,7 +92,6 @@ def balance():
 
         ball_data = pd.read_csv(url_b)
         train_res = balancer.train_time(ball_data)
-
 
         mkdir_new(out_path + '/result_fig')
         for n in [1, 2, 3]:
