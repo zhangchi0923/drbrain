@@ -22,6 +22,7 @@ import utils.pbb_score as pbb_score
 import warnings
 warnings.filterwarnings('ignore')
 
+from fastapi import FastAPI
 from flask import Flask, request, jsonify
 from concurrent.futures import ProcessPoolExecutor
 
