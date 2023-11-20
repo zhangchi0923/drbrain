@@ -97,7 +97,7 @@ class VocabularyDrawer(Drawer):
         super().__init__(id, type, txt)
 
     def draw(self, q_id, x, y) -> io.BytesIO:
-        img = plt.imread('./pcat-design/vocab/{}/{}.png'.format(self.team, q_id))
+        img = plt.imread('./assets/pcat-design/vocab/{}/{}.png'.format(self.team, q_id))
         plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
         # pos_x, pos_y = self.despike(x, y)
         # plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
@@ -116,7 +116,7 @@ class PortraitDrawer(Drawer):
         super().__init__(id, type, txt)
     
     def draw(self, q_id, x, y) -> io.BytesIO:
-        img = plt.imread('./pcat-design/portrait/{}.png'.format(q_id))
+        img = plt.imread('./assets/pcat-design/portrait/{}.png'.format(q_id))
         plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
         # pos_x, pos_y = self.despike(x, y)
         # plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)
@@ -144,7 +144,7 @@ class OrigamiDrawer(Drawer):
         super().__init__(id, type, txt)
     
     def draw(self, q_id, x, y) -> io.BytesIO:
-        img = plt.imread('./pcat-design/origami/{}/{}.png'.format(self.team, q_id))
+        img = plt.imread('./assets/pcat-design/origami/{}/{}.png'.format(self.team, q_id))
         plt.imshow(img, extent=[-3.84, 3.84, -2.16, 2.16])
         # pos_x, pos_y = self.despike(x, y)
         # plt.plot(pos_x, pos_y, 'r-', linewidth=0.5)

@@ -34,4 +34,3 @@ if __name__ == "__main__":
         headers={"Authorization": "".join(crypt2post)}
     ) as r:
         print(r.text)
-        print(r.status_code)

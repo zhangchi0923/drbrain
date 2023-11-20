@@ -22,16 +22,26 @@ import utils.pbb_score as pbb_score
 import warnings
 warnings.filterwarnings('ignore')
 
-from fastapi import FastAPI
-from flask import Flask, request, jsonify
+from fastapi import FastAPI, Request, BackgroundTasks
+from pydantic import BaseModel
+from typing import Union
+
+import uvicorn
+
+# from flask import Flask, request, jsonify
 from concurrent.futures import ProcessPoolExecutor
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = FastAPI()
 
+class GeneralResponseModel(BaseModel):
+    code: int
+    msg: str
+    body: Union[str, dict, None] = None
 # utils function
 from config.settings import SALT, RESOURCE_PATH
 def get_md5(d):
-    d = dict(sorted(d.items()))
+    d = dict(sorted(d.dict().items()))
     s=''
     for k, v in d.items():
         s += str(k) + str(v)
@@ -57,21 +67,30 @@ def get_logger(log_id, pth):
         exe_logger.addHandler(handler)
         return exe_logger
 
-@app.route('/balance', methods=['POST'])
-def balance():
-    args = request.get_json(force=True)
+
+# Balance request model
+class BalanceRequestModel(BaseModel):
+    urlHead: str
+    urlBall: str
+    outPath: str
+    mode: str
+
+# @app.route('/balance', methods=['POST'])
+@app.post("/balance")
+def balance(model: BalanceRequestModel, request: Request):
+    # args = request.get_json(force=True)
     auth = request.headers.get('Authorization')
-    auth_srv = get_md5(args)
+    auth_srv = get_md5(model)
     if auth_srv != auth:
-        return jsonify({
-            'code':401,
-            'msg':'Authorization failed.',
-            'body':None
-        })
-    url_h = args['urlHead']
-    url_b = args['urlBall']
-    out_path = args['outPath']
-    mode = args['mode']
+        return GeneralResponseModel(
+            code=401,
+            msg='Authorization failed.',
+            body=None
+        )
+    url_h = model.urlHead
+    url_b = model.urlBall
+    out_path = model.outPath
+    mode = model.mode
 
     balancer = Balancer(out_path, mode)
     # log setting
@@ -101,10 +120,10 @@ def balance():
         with open(out_path+'/vel.json', 'w') as f:
             json.dump(vel_list, f)
 
-        out_dict = {
-            'code':200,
-            'msg':'Computation completed successfully.',
-            'body':{
+        resp = GeneralResponseModel(
+            code=200,
+            msg='Computation completed successfully.',
+            body={
                 'forth': '{:.2f}'.format(des_head_data.loc['max', 'pos_y']), 
                 'back': '{:.2f}'.format(abs(des_head_data.loc['min', 'pos_y'])), 
                 'left': '{:.2f}'.format(des_head_data.loc['max', 'pos_x']), 
@@ -122,7 +141,7 @@ def balance():
                 'leftBackPct': '{:.2f}%'.format(train_res.loc['rate', 3]*100),
                 'rightBackPct': '{:.2f}%'.format(train_res.loc['rate', 4]*100)
             }
-        }
+        )
 
         logger.info("Velocity calculated.")
         logger.info("--------------------------------")
@@ -140,26 +159,30 @@ def balance():
         logger.info("Right_back: suc--{:.2f}% pct--{:.2f}%".format(train_res.loc['succeed', 4]*100, train_res.loc['rate', 4]*100))
         logger.info("--------------END---------------")
 
-        return jsonify(out_dict)
+        return resp
     except Exception as e:
         logger.exception(e, stacklevel=1)
-        return jsonify({'code':500, 'msg': str(e), 'body':None})
+        return GeneralResponseModel(code=500, msg=str(e), body=None)
 
-@app.route('/pingpong', methods=['POST'])
-def pingpong():
-    args = request.get_json(force=True)
+class PingpongRequestModel(BaseModel):
+    dataUrl: str
+    holdType: str
+    path: str
+# @app.route('/pingpong', methods=['POST'])
+@app.post('/pingpong')
+def pingpong(model: PingpongRequestModel, request: Request):
     auth = request.headers.get('Authorization')
-    auth_srv = get_md5(args)
+    auth_srv = get_md5(model)
     if auth_srv != auth:
-        return jsonify({
-            'code':401,
-            'msg':'Authorization failed.',
-            'body':None
-        })
-    url = args['dataUrl']
-    hold_type = args['holdType']
+        return GeneralResponseModel(
+            code=401,
+            msg='Authorization failed.',
+            body=None
+        )
+    url = model.dataUrl
+    hold_type = model.holdType
     read_pth = RESOURCE_PATH
-    write_pth = args['path']
+    write_pth = model.path
 
     pp = Pingpong(hold_type, read_pth, write_pth + "/pp_result_fig")
 
@@ -185,9 +208,9 @@ def pingpong():
         with open(write_pth+'/vel.json', 'w') as f:
             json.dump(vel_list, f)
 
-        out_dict = {'code':200,
-                    'msg':'Computation completed successfully.',
-                    'body':{
+        resp = GeneralResponseModel(code=200,
+                    msg='Computation completed successfully.',
+                    body={
                         'forth': '{:.2f}'.format(abs(des_head_data.loc['max', 'handPosZ'])), 
                         'back': '{:.2f}'.format(abs(des_head_data.loc['min', 'handPosZ'])), 
                         'left': '{:.2f}'.format(abs(des_head_data.loc['max', 'handPosX'])), 
@@ -195,7 +218,7 @@ def pingpong():
                         'up': '{:.2f}'.format(abs(des_head_data.loc['max', 'handPosY'])), 
                         'down': '{:.2f}'.format(abs(des_head_data.loc['min', 'handPosY'])),
                     }          
-        }
+        )
 
         logger.info("Ranges calculated.")
         logger.info("--------------------------------")
@@ -207,31 +230,36 @@ def pingpong():
         logger.info("Down: {:.2f}".format(abs(des_head_data.loc['min', 'handPosY'])))
         logger.info("--------------END---------------")
 
-        return jsonify(out_dict)
+        return resp
     except Exception as e:
         logger.exception(e, stacklevel=1)
-        return jsonify({'code':500, 'msg': str(e), 'body':None})
+        return GeneralResponseModel(code=500, msg=str(e), body=None)
 
-@app.route('/eye/screen', methods=['POST'])
-def eye_screen():
+class EyeScreenReqeustModel(BaseModel):
+    sex: str
+    age: int
+    education: str
+    url: str
+    saveResourcesPath: str
+    questionVersion: str
 
-    args = request.get_json(force=True)
+@app.post('/eye/screen')
+def eye_screen(model: EyeScreenReqeustModel, request: Request, background_tasks: BackgroundTasks):
     auth = request.headers.get('Authorization')
-    auth_srv = get_md5(args)
+    auth_srv = get_md5(model)
     if auth_srv != auth:
-        # logger.error('Authorization failed.\nAuth from client:{}\nAuth from server:{}'.format(auth, auth_srv))
-        return jsonify({
-            'code':401,
-            'msg':'Authorization failed.',
-            'body':None
-        })
-    gender = args['sex']
-    age = args['age']
-    education = args['education']
-    url = args['url']
+        return GeneralResponseModel(
+            code=401,
+            msg='Authorization failed.',
+            body=None
+        )
+    gender = model.sex
+    age = model.age
+    education = model.education
+    url = model.url
     # src = args['backupResources']
-    save_pth = args['saveResourcesPath']
-    q_ver = args['questionVersion']
+    save_pth = model.saveResourcesPath
+    q_ver = model.questionVersion
     src = './assets/design-{}/'.format(q_ver)
 
     _, sid = os.path.split(url)
@@ -239,13 +267,14 @@ def eye_screen():
     logger = get_logger(sid, './log/eyescreen_log')
     logger.info('Authorization succeed.')
 
-    executer = ProcessPoolExecutor(1)
-    executer.submit(draw_eye_screen, url, save_pth, src)
+    # executer = ProcessPoolExecutor(1)
+    # executer.submit(draw_eye_screen, url, save_pth, src)
+    background_tasks.add_task(draw_eye_screen, url, save_pth, src)
     logger.info('Eye screen plot submitted.')
     # print(os.getcwd(), src, save_pth)
     results = calc_eye_screen(url, gender, education, age, save_pth, src, logger)
     logger.info('Eye screen results: {}'.format(results))
-    return jsonify(results)
+    return results
 
 def calc_eye_screen(url, gender, education, age, save_pth, src, logger):
     with requests.get(url) as r:
@@ -262,12 +291,12 @@ def calc_eye_screen(url, gender, education, age, save_pth, src, logger):
         logger.info('Cog score: {}\nMoCA: {} MMSE: {}'.format(cog_score, moca, mmse))
     except Exception as e:
         logger.exception(e)
-        return {
-            'code':500,
+        return GeneralResponseModel(
+            code=500,
             # 'msg':'Error during score predicting.',
-            'msg':str(e),
-            'body':None
-        }
+            msg=str(e),
+            body=None
+        )
 
     body = {
         'mmse':round(mmse, 1),
@@ -291,21 +320,24 @@ def calc_eye_screen(url, gender, education, age, save_pth, src, logger):
 def draw_eye_screen(url, out_pth, design_pth):
     os.system('python ./utils/justscore_bySection_4urldata_final.py {} {} {}'.format(url, out_pth, design_pth))
 
+
+class FireflyRequestModel(BaseModel):
+    url: str
+    savePath: str
 # create app 'eye/train/firefly' with POST method. Related class was created in eye/train/Firefly.py
-@app.route('/eye/train/firefly', methods=['POST'])
-def firefly():
-    args = request.get_json(force=True)
+# @app.route('/eye/train/firefly', methods=['POST'])
+@app.post('/eye/train/firefly')
+def firefly(model: FireflyRequestModel, request: Request):
     auth = request.headers.get('Authorization')
-    auth_srv = get_md5(args)
+    auth_srv = get_md5(model)
     if auth_srv != auth:
-        # logger.error('Authorization failed.\nAuth from client:{}\nAuth from server:{}'.format(auth, auth_srv))
-        return jsonify({
-            'code':401,
-            'msg':'Authorization failed.',
-            'body':None
-        })
-    url = args['url']
-    savePath = args['savePath']
+        return GeneralResponseModel(
+            code=401,
+            msg='Authorization failed.',
+            body=None
+        )
+    url = model.url
+    savePath = model.savePath
     mkdir_new(savePath)
 
     _, sid = os.path.split(url)
@@ -322,21 +354,19 @@ def firefly():
         firefly = Firefly(df, savePath)
         firefly.plot()
         logger.info('Firefly plot succeed.')
-        return jsonify({
-            'code':200,
-            'msg':'Firefly plot succeed.',
-            'body':None
-        })
+        return GeneralResponseModel(code=200, msg='Firefly plot succeed.', body=None)
+
     except Exception as e:
         logger.exception(e)
-        return jsonify({
-            'code': 500,
-            'msg': e,
-            'body': None
-        })
+        return GeneralResponseModel(code=500, msg=str(e), body=None)
 
-@app.route('/eye/pcat', methods=['POST'])
-def eye_pcat():
+class PcatRequestModel(BaseModel):
+    id: str
+    type: str
+    url: str
+# @app.route('/eye/pcat', methods=['POST'])
+@app.post('/eye/pcat')
+def eye_pcat(model: PcatRequestModel, request: Request, background_tasks: BackgroundTasks):
     '''
     :param id: 筛查ID
     :param type: 筛查类型
@@ -344,65 +374,67 @@ def eye_pcat():
     :return code: 返回码 e.g.200, 404
     :return objects_url: 对象存储地址列表
     '''
-    args = request.get_json(force=True)
     auth = request.headers.get('Authorization')
-    auth_srv = get_md5(args)
+    auth_srv = get_md5(model)
     if auth_srv != auth:
-        return jsonify({
-            'code':401,
-            'msg':'Authorization failed.',
-            'body':None
-        })
+        return GeneralResponseModel(
+            code=401,
+            msg='Authorization failed.',
+            body=None
+        )
 
-    id, type, url = args['id'], args['type'], args['url']
+    id, type, url = model.id, model.type, model.url
     mkdir_new('./log/pcat_log')
     _, sid = os.path.split(url)
     logger = get_logger(sid, './log/pcat_log')
     try:
         pcat = PCAT.Pcat(id, type, url)
         objects_urls = pcat.make_cos_urls()
-        executer = ProcessPoolExecutor(1)
+        # executer = ProcessPoolExecutor(1)
         # executer = ThreadPoolExecutor(2)
-        executer.submit(draw_pcat, id, type, url)
+        # executer.submit(draw_pcat, id, type, url)
+        background_tasks.add_task(draw_pcat, id, type, url)
         logger.info("PCAT Plot task submitted.")
-        res = {
-            'code': 200,
-            'body': {
+        resp = GeneralResponseModel(
+            code=200,
+            body={
                 'objectsUrls': objects_urls
             },
-            'msg': 'success'
-        }
-        return jsonify(res)
+            msg='success'
+        )
+        return resp
     except Exception as e:
         logger.exception(str(e))
         if isinstance(e, ConnectionError) or isinstance(e, KeyError):
-            return jsonify({
-                'code': 503,
-                'body':{'objectsUrls': []},
-                'msg': str(e)
-            })
-        return jsonify({
-            'code':500, 
-            'body':{'objectsUrls': []}, 
-            'msg': str(e)
-        })
+            return GeneralResponseModel(code=503, body={'objectUrls': []}, msg=str(e))
+        
+        return GeneralResponseModel(code=500, body={'objectUrls': []}, msg=str(e))
+        # return jsonify({
+        #     'code':500, 
+        #     'body':{'objectsUrls': []}, 
+        #     'msg': str(e)
+        # })
 
 def draw_pcat(id, type, url):
     os.system('python ./utils/pcat_draw.py {} {} {}'.format(id, type, url))
 
-@app.route('/rehab/sd/cervical', methods=['POST'])
-def sd_cervical():
-    args = request.get_json(force=True)
-    auth = request.headers.get('Authorization')
-    auth_srv = get_md5(args)
-    if auth_srv != auth:
-        return jsonify({
-            'code':401,
-            'msg':'Authorization failed.',
-            'body':None
-        })
+class CervicalReuqestModel(BaseModel):
+    id: str
+    url: str
 
-    id, url = args['id'], args['url']
+# @app.route('/rehab/sd/cervical', methods=['POST'])
+@app.post('/rehab/sd/cervical')
+def sd_cervical(model: CervicalReuqestModel, request: Request):
+    auth = request.headers.get('Authorization')
+    auth_srv = get_md5(model)
+    if auth_srv != auth:
+        return GeneralResponseModel(
+            code=401,
+            msg='Authorization failed.',
+            body=None
+        )
+
+    id, url = model.id, model.url
     mkdir_new('./log/sd_cervical_log')
     _, sid = os.path.split(url)
     logger = get_logger(sid, './log/sd_cervical_log')
@@ -413,32 +445,25 @@ def sd_cervical():
         json_keys = sd_cervical.get_vel_ang()
         img_keys = sd_cervical.draw()
 
-        res = {
-            'code': 200,
-            'body': {
-                'magnitude': magnitudes,
+        resp = GeneralResponseModel(
+            code=200, 
+            body={
+            'magnitude': magnitudes,
                 'urls': {
                     'img': img_keys,
                     'vel': json_keys
                 }
             },
-            'msg': 'success'
-        }
-        return jsonify(res)
+            msg='success'
+        )
+
+        return resp
     except Exception as e:
         logger.exception(str(e))
         if isinstance(e, ConnectionError) or isinstance(e, KeyError):
-            return jsonify({
-                'code': 503,
-                'body':{'magnitude': []},
-                'msg': str(e)
-            })
-        return jsonify({
-            'code':500, 
-            'body':{'magnitude': []}, 
-            'msg': str(e)
-        })
+            return GeneralResponseModel(code=503, body={'magnitude':[]}, msg=str(e))
+        return GeneralResponseModel(code=500, body={'magnitude': []}, msg=str(e))
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8101)
+    uvicorn.run(app, host='127.0.0.1', port=8101)
     
