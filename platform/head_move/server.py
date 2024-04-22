@@ -19,6 +19,8 @@ from utils.Firefly import Firefly
 import utils.PCAT as PCAT
 from utils.Cervical import Cervical
 import utils.pbb_score as pbb_score
+from utils.auth import auth_validate
+from utils.response_template import GeneralResponseModel
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -34,21 +36,8 @@ from concurrent.futures import ProcessPoolExecutor
 # app = Flask(__name__)
 app = FastAPI()
 
-class GeneralResponseModel(BaseModel):
-    code: int
-    msg: str
-    body: Union[str, dict, None] = None
-# utils function
+
 from config.settings import SALT, RESOURCE_PATH
-def get_md5(d):
-    d = dict(sorted(d.dict().items()))
-    s=''
-    for k, v in d.items():
-        s += str(k) + str(v)
-    s = SALT + s
-    md5 = hashlib.md5()
-    md5.update(s.encode("utf-8"))
-    return md5.hexdigest()
 
 def mkdir_new(path):
         if not os.path.exists(path):
@@ -79,14 +68,10 @@ class BalanceRequestModel(BaseModel):
 @app.post("/balance")
 def balance(model: BalanceRequestModel, request: Request):
     # args = request.get_json(force=True)
-    auth = request.headers.get('Authorization')
-    auth_srv = get_md5(model)
-    if auth_srv != auth:
-        return GeneralResponseModel(
-            code=401,
-            msg='Authorization failed.',
-            body=None
-        )
+    auth_resp = auth_validate(model, request)
+    if auth_resp:
+        return auth_resp
+
     url_h = model.urlHead
     url_b = model.urlBall
     out_path = model.outPath
@@ -171,14 +156,10 @@ class PingpongRequestModel(BaseModel):
 # @app.route('/pingpong', methods=['POST'])
 @app.post('/pingpong')
 def pingpong(model: PingpongRequestModel, request: Request):
-    auth = request.headers.get('Authorization')
-    auth_srv = get_md5(model)
-    if auth_srv != auth:
-        return GeneralResponseModel(
-            code=401,
-            msg='Authorization failed.',
-            body=None
-        )
+
+    auth_resp = auth_validate(model, request)
+    if auth_resp:
+        return auth_resp
     url = model.dataUrl
     hold_type = model.holdType
     read_pth = RESOURCE_PATH
@@ -245,14 +226,10 @@ class EyeScreenReqeustModel(BaseModel):
 
 @app.post('/eye/screen')
 def eye_screen(model: EyeScreenReqeustModel, request: Request, background_tasks: BackgroundTasks):
-    auth = request.headers.get('Authorization')
-    auth_srv = get_md5(model)
-    if auth_srv != auth:
-        return GeneralResponseModel(
-            code=401,
-            msg='Authorization failed.',
-            body=None
-        )
+
+    auth_resp = auth_validate(model, request)
+    if auth_resp:
+        return auth_resp
     gender = model.sex
     age = model.age
     education = model.education
@@ -328,14 +305,10 @@ class FireflyRequestModel(BaseModel):
 # @app.route('/eye/train/firefly', methods=['POST'])
 @app.post('/eye/train/firefly')
 def firefly(model: FireflyRequestModel, request: Request):
-    auth = request.headers.get('Authorization')
-    auth_srv = get_md5(model)
-    if auth_srv != auth:
-        return GeneralResponseModel(
-            code=401,
-            msg='Authorization failed.',
-            body=None
-        )
+
+    auth_resp = auth_validate(model, request)
+    if auth_resp:
+        return auth_resp
     url = model.url
     savePath = model.savePath
     mkdir_new(savePath)
@@ -374,15 +347,10 @@ def eye_pcat(model: PcatRequestModel, request: Request, background_tasks: Backgr
     :return code: 返回码 e.g.200, 404
     :return objects_url: 对象存储地址列表
     '''
-    auth = request.headers.get('Authorization')
-    auth_srv = get_md5(model)
-    if auth_srv != auth:
-        return GeneralResponseModel(
-            code=401,
-            msg='Authorization failed.',
-            body=None
-        )
 
+    auth_resp = auth_validate(model, request)
+    if auth_resp:
+        return auth_resp
     id, type, url = model.id, model.type, model.url
     mkdir_new('./log/pcat_log')
     _, sid = os.path.split(url)
@@ -425,15 +393,10 @@ class CervicalReuqestModel(BaseModel):
 # @app.route('/rehab/sd/cervical', methods=['POST'])
 @app.post('/rehab/sd/cervical')
 def sd_cervical(model: CervicalReuqestModel, request: Request):
-    auth = request.headers.get('Authorization')
-    auth_srv = get_md5(model)
-    if auth_srv != auth:
-        return GeneralResponseModel(
-            code=401,
-            msg='Authorization failed.',
-            body=None
-        )
 
+    auth_resp = auth_validate(model, request)
+    if auth_resp:
+        return auth_resp
     id, url = model.id, model.url
     mkdir_new('./log/sd_cervical_log')
     _, sid = os.path.split(url)

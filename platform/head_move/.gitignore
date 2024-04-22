@@ -7,9 +7,5 @@ head_rotate.ipynb
 mmse_et_pipeline.pkl
 moca_et_pipeline.pkl
 screen.ipynb
-<<<<<<< HEAD
 .vscode
 __pycache__
-=======
-.vscode
->>>>>>> prod
