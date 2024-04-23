@@ -2,7 +2,7 @@
 SALT = "drbrain&*("
 
 # pingpong parameters
-RESOURCE_PATH = './assets/src_fig_pp'
+PP_PATH = './assets/src_fig_pp'
 
 
 

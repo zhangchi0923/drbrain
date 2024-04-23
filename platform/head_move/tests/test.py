@@ -23,7 +23,7 @@ if __name__ == "__main__":
         "urlHead": "https://cos.drbrain.net/profile/tj/2023/2/19/73c54bbf-579b-4d16-9b4c-d57af6d4c057.txt",
         "urlBall": "https://cos.drbrain.net/profile/tj/2023/2/19/fd86650e-58e3-4890-8f06-8ebce6cd4ddc.txt",
         "outPath": "./log/balance_log",
-        "mode": "head"
+        "mode": "sit"
     }
     crypt2post = get_md5(data2post)
     # print(crypt2post)

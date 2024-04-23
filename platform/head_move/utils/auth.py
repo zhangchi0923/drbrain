@@ -2,7 +2,7 @@ import hashlib
 from fastapi import Request
 from pydantic import BaseModel 
 from utils.response_template import GeneralResponseModel
-from config.settings import SALT, RESOURCE_PATH
+from config.settings import SALT
 
 
 def get_md5(d):
