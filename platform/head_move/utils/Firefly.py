@@ -16,6 +16,7 @@ import warnings
 from pydantic import BaseModel
 
 from utils.auth import auth_validate
+from utils.logger import get_logger
 from utils.response_template import GeneralResponseModel
 warnings.filterwarnings("ignore")
 
@@ -51,19 +52,6 @@ def plot(df, save_path):
         # save figure without white spaces
         plt.savefig(save_path+'/heatmap.png', bbox_inches='tight')
         plt.close()
-
-def get_logger(log_id, pth):
-    date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-    exe_logger = logging.getLogger()
-    exe_logger.setLevel(level=logging.INFO)
-    handler = logging.FileHandler(os.path.join(pth, 'log_' + date_time + '_' + log_id))
-    handler.setLevel(logging.INFO)
-
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-
-    exe_logger.addHandler(handler)
-    return exe_logger
 
 def firefly(model: FireflyRequestModel, request: Request):
 

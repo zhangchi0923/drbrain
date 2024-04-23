@@ -18,6 +18,7 @@ from config.settings import AOIs, BEZIER_POINTS
 import itertools
 import random
 from sklearn.linear_model import LinearRegression
+from utils.logger import get_logger
 
 from utils.response_template import GeneralResponseModel
 
@@ -29,18 +30,6 @@ class EyeScreenReqeustModel(BaseModel):
     saveResourcesPath: str
     questionVersion: str
 
-def get_logger(log_id, pth):
-    date_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-    exe_logger = logging.getLogger()
-    exe_logger.setLevel(level=logging.INFO)
-    handler = logging.FileHandler(os.path.join(pth, 'log_' + date_time + '_' + log_id))
-    handler.setLevel(logging.INFO)
-
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-
-    exe_logger.addHandler(handler)
-    return exe_logger
 
 base_cat = ['abs', 'calc4', 'calc5', 'calc6', 'exec', 'mem8', 'mem9', 'mem10', 'recall']
 eye_cat = ['_aoi_ratio', '_ffd', '_ttff', '_nfbff']
