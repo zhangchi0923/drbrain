@@ -4,9 +4,7 @@
  create date: 2023-03-13 11:27:43
 """
 
-import datetime
 import json
-import logging
 import os
 import sys
 from fastapi import Request
@@ -322,7 +320,7 @@ def balance(model: BalanceRequestModel, request: Request):
     auth_resp = auth_validate(model, request)
     if auth_resp:
         return auth_resp
-
+    # params from request
     url_h = model.urlHead
     url_b = model.urlBall
     out_path = model.outPath

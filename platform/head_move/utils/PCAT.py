@@ -4,13 +4,13 @@ from fastapi import BackgroundTasks, Request
 import pandas as pd
 from pydantic import BaseModel
 import requests
-from config.settings import PREFIX, URL_PREFIX
+from config.settings import settings
 from utils.auth import auth_validate
 from utils.logger import get_logger
 from utils.response_template import GeneralResponseModel
 
 class PcatRequestModel(BaseModel):
-    id: str
+    id: int
     type: str
     url: str
 
@@ -54,10 +54,10 @@ def make_cos_urls(id, type, url):
     cos_urls = []
     now = datetime.datetime.now()
     year, month, day = str(now.year), str(now.month), str(now.day)
-    base_key = '/'.join([PREFIX, year, month, day, str(id), type])
+    base_key = '/'.join([settings.prefix, year, month, day, str(id), type])
     for i in range(1, img_num + 1):
         key = base_key + '/{}.jpg'.format(i)
-        cos_urls.append(URL_PREFIX + key)
+        cos_urls.append(settings.url_prefix + key)
     return cos_urls
 
 def eye_pcat(model: PcatRequestModel, request: Request, background_tasks: BackgroundTasks):

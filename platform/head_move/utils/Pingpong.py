@@ -4,9 +4,7 @@
  create date: 2023-02-10 13:36:10
 """
 
-import datetime
 import json
-import logging
 import os
 import random
 import sys
@@ -21,7 +19,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.patches import Wedge
-from config.settings import PP_PATH
+from config.settings import settings
 from utils.auth import auth_validate
 from utils.logger import get_logger
 
@@ -686,7 +684,7 @@ def pingpong(model: PingpongRequestModel, request: Request):
         return auth_resp
     url = model.dataUrl
     hold_type = model.holdType
-    read_pth = PP_PATH
+    read_pth = settings.pp_path
     write_pth = model.path + "/pp_result_fig"
 
 

@@ -8,11 +8,9 @@
 
 import pandas as pd
 import numpy as np
-import requests
-import logging
 
 from math import pi
-from config.settings import *
+from config.settings import settings
 
 class DataUtils():
     def __init__(self, s):
@@ -353,7 +351,7 @@ class EyeMovement():
 def test(s: str):
     
     level, state = 10, 2
-    aoi = AOIs[level]
+    aoi = settings.settings[level]
     util = DataUtils(s)
     raw_data = util.prepare_data(s)
     x, y, time = util.get_lvl_state(raw_data, level, state)

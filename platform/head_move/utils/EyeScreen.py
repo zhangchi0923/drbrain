@@ -3,8 +3,6 @@
  email: zcsjtu0923@gmail.com
  create date: 2023-03-13 11:27:27
 """
-import datetime
-import logging
 import os
 from fastapi import BackgroundTasks, Request
 import pandas as pd
@@ -14,7 +12,7 @@ import requests
 from sklearn import linear_model
 from utils.auth import auth_validate
 import utils.eyeMovement as eyeMovement
-from config.settings import AOIs, BEZIER_POINTS
+from config.settings import settings
 import itertools
 import random
 from sklearn.linear_model import LinearRegression
@@ -37,7 +35,7 @@ cog_cat = ['att'] + [x[0] + x[1] for x in itertools.product(base_cat, ['_aoi_rat
 num_cols = ['att'] + [x[0] + x[1] for x in itertools.product(base_cat, eye_cat)]
 cat_cols = ['gender', 'education', 'age']
 feat_cols = cat_cols + num_cols
-allPoints = np.array(BEZIER_POINTS)
+allPoints = np.array(settings.bezier_points)
 
 
 def findMinMax(a,b):
@@ -62,7 +60,7 @@ def extended_ROI(ROIs,percent = 0.1):
         Y1 = Y1 + margin_y
         newROIs[key] = [(X0,Y0),(X1,Y1)]
     return newROIs
-ROIs = extended_ROI(AOIs)
+ROIs = extended_ROI(settings.aois)
 
 def bezier_order3(t, points):
     p0 = points[0,:]
@@ -297,7 +295,7 @@ def preprocess_feat(df, gender, education, age) -> pd.DataFrame:
     y = model.predict(X)[:, 1]
     tmpdf = pd.DataFrame({'timestamp': time, 'pos_x': x, 'pos_y': y})
 
-    detector_l2 = eyeMovement.EyeMovement(x, y, time, AOIs, BEZIER_POINTS)
+    detector_l2 = eyeMovement.EyeMovement(x, y, time, settings.aois, settings.bezier_points)
     att = detector_l2.fanbo_follow_rate(tmpdf)
     feats = [att]
     # other
@@ -313,14 +311,14 @@ def preprocess_feat(df, gender, education, age) -> pd.DataFrame:
         y = y.flatten()
         time = time.flatten()
         detector = eyeMovement.EyeMovement(
-            x, y, time, AOIs[level], BEZIER_POINTS)
+            x, y, time, settings.aois[level], settings.bezier_points)
         fix_data = detector.eye_movements_detector(x, y, time)
         _, _, merged = detector.merge_fixation(fix_data)
         # feats.append(detector.AOI_fixation_ratio(merged))
 
         # 烦勃要求的
         tmpdf = pd.DataFrame({'timestamp': time, 'pos_x': x, 'pos_y': y})
-        feats.append(detector.measureGazeRate(tmpdf, AOIs[level]))
+        feats.append(detector.measureGazeRate(tmpdf, settings.aois[level]))
 
         ffd, ttff, nfbff = detector.AOI_first_fixation(merged)
         feats += [ffd, ttff, nfbff]
@@ -360,7 +358,7 @@ def bezier_order3(t, points):
 def get_live_bezier(trueTime, start_time):
     bez_x = []
     bez_y = []
-    allPoints = np.array(BEZIER_POINTS)
+    allPoints = np.array(settings.bezier_points)
     for time in trueTime:
         rel_time = (time-start_time)/2.5
         # for detecting current section in 4 bezier curves
@@ -427,11 +425,11 @@ def calc_eye_screen(url, gender, education, age, logger):
     
     try:
         data = preprocess_feat(df, gender, education, age)
-        print(1)
+        # print(1)
         moca, mmse = predict(data)
-        print(2)
+        # print(2)
         scores = compute_cog_score(df)
-        print(scores)
+        # print(scores)
         scores = [x*100 for x in scores]
         logger.info('Cog score: {}\nMoCA: {} MMSE: {}'.format(scores, moca, mmse))
     except Exception as e:

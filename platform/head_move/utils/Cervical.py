@@ -1,11 +1,10 @@
 import io, math, datetime
-import logging
 import os
 from fastapi import Request
 
 import pandas as pd
 from pydantic import BaseModel
-from config.settings import *
+from config.settings import settings
 from qcloud_cos import CosConfig, CosS3Client
 import matplotlib.pyplot as plt
 from matplotlib import patches
@@ -16,7 +15,7 @@ from utils.logger import get_logger
 from utils.response_template import GeneralResponseModel
 
 class CervicalReuqestModel(BaseModel):
-    id: str
+    id: int
     url: str
 
     
@@ -136,18 +135,18 @@ def get_vel_ang(id, df):
 
 def draw(id, df):
     try:
-        config = CosConfig(Region=REGION, SecretId=SECRET_ID, SecretKey=SECRET_KEY, Token=None, Scheme="https")
+        config = CosConfig(Region=settings.region, SecretId=settings.secret_id, SecretKey=settings.secret_key, Token=None, Scheme="https")
         client = CosS3Client(config)
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
-        base_key = '/'.join([SD_PREFIX, year, month, day, str(id)])
+        base_key = '/'.join([settings.sd_prefix, year, month, day, str(id)])
 
         bio1 = draw1(df)
-        key1 = URL_PREFIX + _save_img2cos(bio1, client, base_key, 1)
+        key1 = settings.url_prefix + _save_img2cos(bio1, client, base_key, 1)
         bio2 = draw2(df)
-        key2 = URL_PREFIX + _save_img2cos(bio2, client, base_key, 2)
+        key2 = settings.url_prefix + _save_img2cos(bio2, client, base_key, 2)
         bio3 = draw3(df)
-        key3 = URL_PREFIX + _save_img2cos(bio3, client, base_key, 3)
+        key3 = settings.url_prefix + _save_img2cos(bio3, client, base_key, 3)
 
         tags = ['side', 'front', 'up']
         keys = [key1, key2, key3]
@@ -159,11 +158,11 @@ def draw(id, df):
 def save_data2cos(id, bio, buffer_pos=None):
 
     try:
-        config = CosConfig(Region=REGION, SecretId=SECRET_ID, SecretKey=SECRET_KEY, Token=None, Scheme="https")
+        config = CosConfig(Region=settings.region, SecretId=settings.secret_id, SecretKey=settings.secret_key, Token=None, Scheme="https")
         client = CosS3Client(config)
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
-        base_key = '/'.join([SD_PREFIX, year, month, day, str(id)])
+        base_key = '/'.join([settings.sd_prefix, year, month, day, str(id)])
 
         keys = _save_data2cos(bio, client, base_key, buffer_pos)
         return keys
@@ -179,7 +178,7 @@ def _save_data2cos(bio, client, base_key, buffer_pos):
                 bio.seek(0)
                 key = base_key + '/{}.json'.format(i+1)
                 client.put_object(
-                    Bucket=BUCKET_NAME,
+                    Bucket=settings.bucket_name,
                     Body=bio.read1(buffer_pos[i]),
                     Key=key,
                 )
@@ -187,12 +186,12 @@ def _save_data2cos(bio, client, base_key, buffer_pos):
                 bio.seek(buffer_pos[i-1])
                 key = base_key + '/{}.json'.format(i+1)
                 client.put_object(
-                    Bucket=BUCKET_NAME,
+                    Bucket=settings.bucket_name,
                     Body=bio.read1(buffer_pos[i] - buffer_pos[i-1]),
                     Key=key,
                 )
             
-            tmp_keys.append(URL_PREFIX + key)
+            tmp_keys.append(settings.url_prefix + key)
             if len(tmp_keys) == 2:
                 result_keys.append(dict(zip(['vel', 'angle'], tmp_keys)))
                 tmp_keys = []
@@ -207,7 +206,7 @@ def  _save_img2cos(bio, client, base_key, ord):
         key = base_key + '/{}.jpg'.format(ord)
         bio.seek(0)
         client.put_object(
-            Bucket=BUCKET_NAME,
+            Bucket=settings.bucket_name,
             Body=bio.read1(),
             Key=key
         )

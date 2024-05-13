@@ -5,7 +5,7 @@ import hashlib
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "..")))
 
-from config.settings import SALT
+from config.settings import settings
 
 
 def get_md5(d):
@@ -13,7 +13,7 @@ def get_md5(d):
     s=''
     for k, v in d.items():
         s += k+v
-    s = SALT + s
+    s = settings.salt + s
     md5 = hashlib.md5()
     md5.update(s.encode("utf-8"))
     return md5.hexdigest()

@@ -7,9 +7,7 @@ import requests
 
 import sys, os
 sys.path.append(os.getcwd())
-from config.settings import SECRET_ID, SECRET_KEY, REGION, PREFIX, BUCKET_NAME
-
-
+from config.settings import settings
 
 class Drawer(object):
     def __init__(self, id, type, txt):
@@ -38,11 +36,11 @@ class Drawer(object):
     def draw(self): ...
 
     def async_draw(self):
-        config = CosConfig(Region=REGION, SecretId=SECRET_ID, SecretKey=SECRET_KEY, Token=None, Scheme="https")
+        config = CosConfig(Region=settings.region, SecretId=settings.secret_id, SecretKey=settings.secret_key, Token=None, Scheme="https")
         client = CosS3Client(config)
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
-        base_key = '/'.join([PREFIX, year, month, day, str(self.id), self.type])
+        base_key = '/'.join([settings.prefix, year, month, day, str(self.id), self.type])
         for i, q_id in enumerate(self.q_id_list):
             x = self.df.loc[self.df['id'] == q_id, 'x']
             y = self.df.loc[self.df['id'] == q_id, 'y']
@@ -53,7 +51,7 @@ class Drawer(object):
     
     def save2cos(self, bio, client, key):
         response = client.put_object(
-            Bucket=BUCKET_NAME,
+            Bucket=settings.bucket_name,
             Body=bio.read(),
             Key=key,
         )

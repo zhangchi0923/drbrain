@@ -2,7 +2,7 @@ import hashlib
 from fastapi import Request
 from pydantic import BaseModel 
 from utils.response_template import GeneralResponseModel
-from config.settings import SALT
+from config.settings import settings
 
 
 def get_md5(d):
@@ -10,7 +10,7 @@ def get_md5(d):
     s=''
     for k, v in d.items():
         s += str(k) + str(v)
-    s = SALT + s
+    s = settings.salt + s
     md5 = hashlib.md5()
     md5.update(s.encode("utf-8"))
     return md5.hexdigest()
