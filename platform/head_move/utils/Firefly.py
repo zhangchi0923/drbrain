@@ -10,13 +10,14 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
+warnings.filterwarnings("ignore")
 
 from pydantic import BaseModel
 
 from utils.auth import auth_validate
 from utils.logger import get_logger
 from utils.response_template import GeneralResponseModel
-warnings.filterwarnings("ignore")
+from config.settings import settings
 
 class FireflyRequestModel(BaseModel):
     url: str

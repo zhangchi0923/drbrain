@@ -5,18 +5,22 @@ Email:      pbb_194@163.com
 """
 import logging
 import warnings
+warnings.filterwarnings('ignore')
+
 import requests
 from sklearn import linear_model
 import sys
 import os
 import pandas as pd
 import numpy as np
+
+from config.settings import settings
+
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import matplotlib
 matplotlib.use('Agg')
 myFont = fm.FontProperties(fname='C:\Windows\Fonts\simkai.ttf')
-warnings.filterwarnings('ignore')
 
 
 # # # - - - - - - - - coordinate of region of object
@@ -261,13 +265,16 @@ def main(url, outputPth, designPth):
     try:
         # state of subject
         stateDict = {0: '读题', 1: '预览图文', 2: '答题'}
-        response = requests.get(url, verify=False)
-        if response.__getstate__()['status_code'] != 200:
-            logger.info('Http errr for data loading!')
-            pass
-        df = text2Df(response.text)
 
-        response.close()
+        if settings.deploy_mode == 'offline':
+            with open(url) as f:
+                df = text2Df(f.read())
+        else:
+            with requests.get(url) as r:
+                if r.status_code != 200 :
+                    logger.error("Cannot access url data!")
+                txt = r.text
+                df = text2Df(txt)
 
         # # # data preprocessing
         # start time, time unit: ms

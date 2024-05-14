@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 from scipy.spatial import ConvexHull
 from numpy import linalg as LA
+from config.settings import settings
 
 class BalanceRequestModel(BaseModel):
     urlHead: str
@@ -335,12 +336,18 @@ def balance(model: BalanceRequestModel, request: Request):
 
     try:
         # requests to get data
-        with requests.get(url_h) as url_data:
-            if url_data.status_code != 200:
-                logger.error("Cannot access url data!")
-                sys.exit()
-            txt_head_data = text2Df(url_data.text)
-            des_head_data = txt_head_data.describe()
+        if settings.deploy_mode == 'offline':
+            with open(url_h) as f:
+                head_data = f.read()
+        else:
+            with requests.get(url_h) as url_data:
+                if url_data.status_code != 200:
+                    logger.error("Cannot access url data!")
+                    sys.exit()
+                head_data = url_data.text
+        
+        txt_head_data = text2Df(head_data)
+        des_head_data = txt_head_data.describe()
 
         ball_data = pd.read_csv(url_b)
         train_res = train_time(ball_data)

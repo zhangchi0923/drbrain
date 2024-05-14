@@ -57,7 +57,11 @@ def make_cos_urls(id, type, url):
     base_key = '/'.join([settings.prefix, year, month, day, str(id), type])
     for i in range(1, img_num + 1):
         key = base_key + '/{}.jpg'.format(i)
-        cos_urls.append(settings.url_prefix + key)
+        if settings.deploy_mode == 'enterprise':
+            cos_urls.append(settings.url_prefix + key)
+        else:
+            cos_urls.append(settings.url_prefix_offline + key)
+
     return cos_urls
 
 def eye_pcat(model: PcatRequestModel, request: Request, background_tasks: BackgroundTasks):

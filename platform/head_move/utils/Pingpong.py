@@ -697,12 +697,17 @@ def pingpong(model: PingpongRequestModel, request: Request):
         logger = get_logger(sid, './log/pingpong_log')
         logger.info('Authorization succeed.')
         # requests to get data
-        with requests.get(url) as url_data:
-            if url_data.status_code != 200:
-                logger.error("Cannot access url data!")
-                sys.exit()
-            raw_data = text2Df(url_data.text)
-            des_head_data = raw_data.describe()
+        if settings.deploy_mode == 'deploy':
+             with open(url) as f:
+                pp_data = f.read()
+        else:
+            with requests.get(url) as url_data:
+                if url_data.status_code != 200:
+                    logger.error("Cannot access url data!")
+                    sys.exit()
+                pp_data = url_data.text
+        raw_data = text2Df(pp_data)
+        des_head_data = raw_data.describe()
         
         if not os.path.exists(write_pth):
             os.mkdir(write_pth)

@@ -1,6 +1,10 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
+    # deployment settings
+    # deploy_mode: str = 'entrprise'
+    deploy_mode: str = 'offline'
+
     # crypt parameters
     salt: str = "drbrain&*("
 
@@ -47,10 +51,13 @@ class Settings(BaseSettings):
     secret_key: str = "HOK5f5KWaTCj5GG5jCXjldKyY4PZYN1T"
     region: str = "ap-guangzhou"
     url_prefix: str = "https://cos.drbrain.net/"
+    # url_prefix_offline: str = "/usr/local/project"
+    url_prefix_offline: str = "./offline"
     prefix: str = "profile/pcat/prod"
     bucket_name: str = "product-c-formal-1254083048"
 
     sd_prefix: str = "profile/sd-cervical/prod"
+    sd_prefix_offline: str = "/image/sd-cervical"
 
 
 settings = Settings()

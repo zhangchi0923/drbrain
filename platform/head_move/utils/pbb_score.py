@@ -10,6 +10,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.font_manager as fm
 import matplotlib
+
+from config.settings import Settings
 matplotlib.use('Agg')
 from sklearn import linear_model
 import requests
@@ -220,7 +222,6 @@ def deSpike(arr,threshold=1):
     newArr = arr[idx2,:]
     return newArr
 
-#%%
 def main(url,outputPth,designPth):
 
     mkdir_new(outputPth)
@@ -231,20 +232,22 @@ def main(url,outputPth,designPth):
         maker = 'origin'
 
         stateDict = {0:'读题',1:'预览图文',2:'答题'}                                # state of subject
-        response = requests.get(url,verify=False)
-        if response.__getstate__()['status_code'] != 200:
-            # logger.info('Http errr for data loading!')
-            pass
-        df = text2Df(response.text)
-
-        response.close()
+        if Settings.deploy_mode == 'offline':
+            with open(url) as f:
+                df = text2Df(f.read())
+        else:
+            with requests.get(url) as r:
+                # if r.status_code != 200 :
+                    # logger.error("Cannot access url data!")
+                txt = r.text
+                df = text2Df(txt)
 
         # # # data preprocessing
         startTime = df['timestamp'].min()                                          # start time, time unit: ms
         df.loc[:,'timestamp'] = df['timestamp']-startTime                          # set start time with 0 ms
         idx = df.isna().sum(axis=1)==0                                             # detect index of rows with nan data
         df = df[idx].copy()                                                        # discard rows with nan data
-        #cnt_nan = len(df) - sum(idx)                                                # count nan in eye-tracking data
+        #cnt_nan = len(df) - sum(idx)                                              # count nan in eye-tracking data
         df.sort_values(by = 'timestamp',inplace=True)                              # sort data by time
         df.reset_index(drop=True,inplace=True)
 

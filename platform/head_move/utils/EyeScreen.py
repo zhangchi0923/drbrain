@@ -417,11 +417,15 @@ def eye_screen(model: EyeScreenReqeustModel, request: Request, background_tasks:
     return results
 
 def calc_eye_screen(url, gender, education, age, logger):
-    with requests.get(url) as r:
-        if r.status_code != 200 :
-            logger.error("Cannot access url data!")
-        txt = r.text
-        df = text2DF(txt)
+    if settings.deploy_mode == 'offline':
+        with open(url) as f:
+            txt = f.read()
+    else:
+        with requests.get(url) as r:
+            if r.status_code != 200 :
+                logger.error("Cannot access url data!")
+            txt = r.text
+    df = text2DF(txt)
     
     try:
         data = preprocess_feat(df, gender, education, age)
