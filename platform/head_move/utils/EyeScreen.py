@@ -409,7 +409,7 @@ def eye_screen(model: EyeScreenReqeustModel, request: Request, background_tasks:
 
     # executer = ProcessPoolExecutor(1)
     # executer.submit(draw_eye_screen, url, save_pth, src)
-    background_tasks.add_task(draw_eye_screen, url, save_pth, src)
+    background_tasks.add_task(draw_eye_screen, url, save_pth, src, settings.deploy_mode)
     logger.info('Eye screen plot submitted.')
     # print(os.getcwd(), src, save_pth)
     results = calc_eye_screen(url, gender, education, age, logger)
@@ -461,5 +461,5 @@ def calc_eye_screen(url, gender, education, age, logger):
     logger.info('Eye screen prediction succeed.')
     return resp
 
-def draw_eye_screen(url, out_pth, design_pth):
-    os.system('python ./utils/justscore_bySection_4urldata_final.py {} {} {}'.format(url, out_pth, design_pth))
+def draw_eye_screen(url, out_pth, design_pth, mode):
+    os.system('python ./utils/justscore_bySection_4urldata_final.py {} {} {} {}'.format(url, out_pth, design_pth, mode))

@@ -22,7 +22,8 @@ def get_md5(d):
 if __name__ == '__main__':
     data2post = {
         # "url":  "https://cos.drbrain.net/profile/tj/2023/3/29/0626dfee-6bdd-4b48-af3e-d6545094d1d6.txt",
-        "url":  "https://cos.drbrain.net/profile/tj/2023/7/6/e0c39e46-4c4f-4eaa-afb6-d02a82362600.txt",
+        # "url":  "https://cos.drbrain.net/profile/tj/2023/7/6/e0c39e46-4c4f-4eaa-afb6-d02a82362600.txt",
+        "url":  "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/ff/ff_data.txt",
         "savePath": './log/firefly_log/',
     }
     crypt2post = get_md5(data2post)

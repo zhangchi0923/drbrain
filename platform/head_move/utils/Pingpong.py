@@ -697,7 +697,7 @@ def pingpong(model: PingpongRequestModel, request: Request):
         logger = get_logger(sid, './log/pingpong_log')
         logger.info('Authorization succeed.')
         # requests to get data
-        if settings.deploy_mode == 'deploy':
+        if settings.deploy_mode == 'offline':
              with open(url) as f:
                 pp_data = f.read()
         else:

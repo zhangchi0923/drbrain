@@ -52,7 +52,7 @@ class Settings(BaseSettings):
     region: str = "ap-guangzhou"
     url_prefix: str = "https://cos.drbrain.net/"
     # url_prefix_offline: str = "/usr/local/project"
-    url_prefix_offline: str = "./offline"
+    url_prefix_offline: str = "./log/sd_cervical_log/results"
     prefix: str = "profile/pcat/prod"
     bucket_name: str = "product-c-formal-1254083048"
 

@@ -55,12 +55,14 @@ def get_magnitude(df) -> dict:
 def get_vel_ang(id, df):
     buffer_pos = []
     bio = io.BytesIO()
+    json_keys = {}
 
     if settings.deploy_mode == 'offline':
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
         save_key = '/'.join([settings.url_prefix_offline, settings.sd_prefix_offline, year, month, day, str(id)])
         base_key = '/'.join([settings.sd_prefix_offline, year, month, day, str(id)])
+        os.makedirs(save_key, exist_ok=True)
 
     def vel(row):
         dist = math.sqrt(row['x'] ** 2 + row['y'] ** 2 + row['z'] ** 2)
@@ -190,11 +192,11 @@ def draw(id, df):
         save_key = '/'.join([settings.url_prefix_offline, settings.sd_prefix_offline, year, month, day, str(id)])
 
         if settings.deploy_mode == 'offline':
-            draw1(save_key)
+            draw1(df, save_key)
             key1 = base_key + '/1.jpg'
-            draw2(save_key)
+            draw2(df, save_key)
             key2 = base_key + '/2.jpg'
-            draw3(save_key)
+            draw3(df, save_key)
             key3 = base_key + '/3.jpg'
         else:
             bio1 = draw1(df)

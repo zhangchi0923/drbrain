@@ -24,7 +24,8 @@ if __name__ == '__main__':
         "age": 52,
         "education": "专科",
         # "url": "https://cos.drbrain.net/profile/tj/2023/5/16/3c6b49df-3d93-40ec-8bce-70390174becf.txt",
-        "url": "https://cos.drbrain.net/profile/tj/2023/5/18/e80eea4d-0ef6-4675-86ff-e73593d25121.txt",
+        # "url": "https://cos.drbrain.net/profile/tj/2023/5/18/e80eea4d-0ef6-4675-86ff-e73593d25121.txt",
+        "url": "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/eye/eye_data.txt",
         # "backupResources": "/usr/local/project/algorithm/backup/utiles/design/",
         "questionVersion": 'A',
         "saveResourcesPath": "./log/eyescreen_log/"

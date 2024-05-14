@@ -14,8 +14,6 @@ import os
 import pandas as pd
 import numpy as np
 
-from config.settings import settings
-
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import matplotlib
@@ -243,7 +241,7 @@ def deSpike(arr, threshold=1):
     return newArr
 
 
-def main(url, outputPth, designPth):
+def main(url, outputPth, designPth, mode):
 
     mkdir_new(outputPth)
     logger = None
@@ -266,7 +264,7 @@ def main(url, outputPth, designPth):
         # state of subject
         stateDict = {0: '读题', 1: '预览图文', 2: '答题'}
 
-        if settings.deploy_mode == 'offline':
+        if mode == 'offline':
             with open(url) as f:
                 df = text2Df(f.read())
         else:
@@ -499,9 +497,10 @@ if __name__ == "__main__":
     url = sys.argv[1]
     outputPth = sys.argv[2]
     designPth = sys.argv[3]
+    mode = sys.argv[4]
     # url = 'https://cos.drbrain.net/profile/tj/2022/8/19/5b894af5-5aee-4e47-be11-8d39516cc529.txt'
     # outputPth = r"E:\spyder_projects\drbrain\my_code\gaze_preprocessing\backup\figures\test_5b894af5-5aee-4e47-be11-8d39516cc529"
     # url = "https://cos.drbrain.net/profile/tj/2023/4/9/3d560422-bf7b-483d-9283-87ad0115d992.txt"
     # outputPth = "./eyescreen_log/"
     # designPth = './design-A/'
-    main(url, outputPth, designPth)
+    main(url, outputPth, designPth, mode)
