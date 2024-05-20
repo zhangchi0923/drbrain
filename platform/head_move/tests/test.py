@@ -21,9 +21,11 @@ def get_md5(d):
 if __name__ == "__main__":
     data2post = {
         # "urlHead": "https://cos.drbrain.net/profile/tj/2023/2/19/73c54bbf-579b-4d16-9b4c-d57af6d4c057.txt",
-        "urlHead": "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/balance/head_data.txt",
+        # "urlHead": "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/balance/head_data.txt",
+        "urlHead": "/usr/local/project/api/algorithm/algorithm-platform-test/platform/head_move/local_data/balance/head_data.txt",
         # "urlBall": "https://cos.drbrain.net/profile/tj/2023/2/19/fd86650e-58e3-4890-8f06-8ebce6cd4ddc.txt",
-        "urlBall": "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/balance/sphere_data.txt",
+        # "urlBall": "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/balance/sphere_data.txt",
+        "urlBall": "/usr/local/project/api/algorithm/algorithm-platform-test/platform/head_move/local_data/balance/sphere_data.txt",
         "outPath": "./log/balance_log",
         "mode": "sit"
     }

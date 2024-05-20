@@ -22,7 +22,8 @@ if __name__ == '__main__':
     data2post = {
         "id":  1,
         # "url": "https://cos.drbrain.net/profile/tj/2023/9/21/25efef47-caa6-4820-8617-4dac133c1231.txt", # symbol
-        "url": "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/sd/sd_data.txt", # symbol
+        # "url": "E:/zc/GitProjects/algorithm-platform/platform/head_move/local_data/sd/sd_data.txt", # symbol
+        "url": "/usr/local/project/api/algorithm/algorithm-platform-test/platform/head_move/local_data/sd/sd_data.txt"
     }
     crypt2post = get_md5(data2post)
     with requests.post(
