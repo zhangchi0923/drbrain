@@ -2,8 +2,8 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # deployment settings
-    # deploy_mode: str = 'entrprise'
-    deploy_mode: str = 'offline'
+    deploy_mode: str = 'entrprise'
+    # deploy_mode: str = 'offline'
 
     # crypt parameters
     salt: str = "drbrain&*("
