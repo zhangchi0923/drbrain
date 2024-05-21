@@ -60,7 +60,7 @@ def firefly(model: FireflyRequestModel, request: Request):
     url = model.url
     save_path = model.savePath
     if not os.path.exists(save_path):
-        os.mkdir(save_path)
+        os.makedirs(save_path, exist_ok=True)
 
     _, sid = os.path.split(url)
     if not os.path.exists('./log/firefly_log'):

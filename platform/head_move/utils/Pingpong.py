@@ -710,7 +710,7 @@ def pingpong(model: PingpongRequestModel, request: Request):
         des_head_data = raw_data.describe()
         
         if not os.path.exists(write_pth):
-            os.mkdir(write_pth)
+            os.makedirs(write_pth, exist_ok=True)
         traj_draw(raw_data, hold_type, read_pth, write_pth)
         rot_draw(raw_data, hold_type, read_pth, write_pth)
         vel_list = calc_vel(raw_data)

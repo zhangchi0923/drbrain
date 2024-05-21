@@ -439,7 +439,7 @@ def sd_cervical(model: CervicalReuqestModel, request: Request):
         return auth_resp
     id, url = model.id, model.url
     if not os.path.exists('./log/sd_cervical_log'):
-        os.mkdir('./log/sd_cervical_log')
+        os.makedirs('./log/sd_cervical_log', exist_ok=True)
     _, sid = os.path.split(url)
     logger = get_logger(sid, './log/sd_cervical_log')
     try:

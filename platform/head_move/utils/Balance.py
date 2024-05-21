@@ -329,8 +329,8 @@ def balance(model: BalanceRequestModel, request: Request):
 
     # log setting
     _, sid = os.path.split(url_h)
-    if not os.path.exists(out_path + '/log'):
-        os.mkdir(out_path + '/log')
+    if not os.path.exists("./log/balance_log"):
+        os.makedirs("./log/balance_log", exist_ok=True)
     logger = get_logger(sid, out_path)
     logger.info('Authorization succeed.')
 
@@ -353,7 +353,7 @@ def balance(model: BalanceRequestModel, request: Request):
         train_res = train_time(ball_data)
 
         if not os.path.exists(out_path + '/result_fig'):
-            os.mkdir(out_path + '/result_fig')
+            os.makedirs(out_path + '/result_fig', exist_ok=True)
         for n in [1, 2, 3]:
             draw_sav(txt_head_data, mode, n, './assets/src_fig/', out_path+'/result_fig/'+"traj{}.png".format(n))
             logger.info("traj{} completed.".format(n))
