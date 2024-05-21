@@ -689,6 +689,7 @@ def pingpong(model: PingpongRequestModel, request: Request):
 
 
     try:
+        os.makedirs(write_pth, exist_ok=True)
         # log setting
         _, sid = os.path.split(url)
         # print(sid)
@@ -709,8 +710,8 @@ def pingpong(model: PingpongRequestModel, request: Request):
         raw_data = text2Df(pp_data)
         des_head_data = raw_data.describe()
         
-        if not os.path.exists(write_pth):
-            os.makedirs(write_pth, exist_ok=True)
+        # if not os.path.exists(write_pth):
+        #     os.makedirs(write_pth, exist_ok=True)
         traj_draw(raw_data, hold_type, read_pth, write_pth)
         rot_draw(raw_data, hold_type, read_pth, write_pth)
         vel_list = calc_vel(raw_data)
