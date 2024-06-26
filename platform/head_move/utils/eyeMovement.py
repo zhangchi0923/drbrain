@@ -249,6 +249,31 @@ class EyeMovement():
         dur_in_aoi = sum([x[2] for x in fix_in_aoi])
         dur_total_fix = sum([x[2] for x in fix_data])
         return dur_in_aoi / dur_total_fix
+    
+    def sac_counts(self, sac_data):
+        return len(sac_data)
+    
+    def sac_duration(self, sac_data):
+        dur = 0
+        if self.sac_counts(sac_data) == 0:
+            return dur
+        for sac in sac_data:
+            dur += sac[2]
+        return dur
+    
+    def sac_path_stat(self, sac_data):
+        '''
+        compute mean, max, standard deviation of lengths of saccade path
+        '''
+        if self.sac_counts(sac_data) == 0:
+            return 0, 0, 0
+        path_euc_len = []
+        for sac in sac_data:
+            dx = sac[-1][0] - sac[-2][0]
+            dy = sac[-1][1] - sac[-2][1]
+            euc_dis = np.sqrt(dx * dx + dy * dy)
+            path_euc_len.append(euc_dis)
+        return np.mean(path_euc_len), np.max(path_euc_len), np.std(path_euc_len)
 
     def _bezier_order3(self, t, points):
         p0 = points[0,:]

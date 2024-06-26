@@ -33,7 +33,7 @@ if __name__ == '__main__':
     }
     crypt2post = get_md5(data2post)
     with requests.post(
-        url='http://127.0.0.1:8101/eye/screen',
+        url='http://127.0.0.1:8101/eye/screen/v1',
         data=json.dumps(data2post),
         headers={'Authorization': ''.join(crypt2post)}
     ) as r:

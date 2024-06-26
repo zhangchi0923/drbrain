@@ -30,9 +30,15 @@ class EyeScreenReqeustModel(BaseModel):
 
 
 base_cat = ['abs', 'calc4', 'calc5', 'calc6', 'exec', 'mem8', 'mem9', 'mem10', 'recall']
-eye_cat = ['_aoi_ratio', '_ffd', '_ttff', '_nfbff']
+
+fix_cat = ['_aoi_ratio', '_ffd', '_ttff', '_nfbff']
+sac_cat = ['_sac_counts', '_sac_duration', '_sac_path_mean', '_sac_path_max', '_sac_path_std']
 cog_cat = ['att'] + [x[0] + x[1] for x in itertools.product(base_cat, ['_aoi_ratio'])]
-num_cols = ['att'] + [x[0] + x[1] for x in itertools.product(base_cat, eye_cat)]
+
+fix_cols = ['att'] + [x[0] + x[1] for x in itertools.product(base_cat, fix_cat)]
+sac_cols = [x[0] + x[1] for x in itertools.product(base_cat, sac_cat)]
+
+num_cols = fix_cols + sac_cols
 cat_cols = ['gender', 'education', 'age']
 feat_cols = cat_cols + num_cols
 allPoints = np.array(settings.bezier_points)
@@ -327,6 +333,56 @@ def preprocess_feat(df, gender, education, age) -> pd.DataFrame:
     result.columns = feat_cols
     return result
 
+def preprocess_feat_v1(df, gender, education, age) -> pd.DataFrame:
+    levels = list(range(3, 12, 1))
+    x, y, time = get_lvl_state(df, 2, 2)
+
+    bez_x, bez_y = get_live_bezier(time/1000, time[0]/1000)
+    model = corrModel(x, y, bez_x, bez_y)
+    corr_x = np.corrcoef(x, bez_x, rowvar=False)[0, 1]
+    corr_y = np.corrcoef(y, bez_y, rowvar=False)[0, 1]
+    if corr_x < 0.9 or corr_y < 0.8:
+        model.coef_ = np.array([[1, 0], [0, 1]])
+        model.intercept_ = np.array([0, 0])
+    X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
+    x = model.predict(X)[:, 0]
+    y = model.predict(X)[:, 1]
+    tmpdf = pd.DataFrame({'timestamp': time, 'pos_x': x, 'pos_y': y})
+
+    detector_l2 = eyeMovement.EyeMovement(x, y, time, settings.aois, settings.bezier_points)
+    att = detector_l2.fanbo_follow_rate(tmpdf)
+    feats = [att]
+    # other
+    for level in levels:
+        x, y, time = get_lvl_state(df, level, 2)
+        X = np.concatenate((x.reshape(-1, 1), y.reshape(-1, 1)), axis=1)
+        time = time.reshape(-1, 1)
+        x = model.predict(X)[:, 0]
+        y = model.predict(X)[:, 1]
+        x = x.flatten()
+        y = y.flatten()
+        time = time.flatten()
+        detector = eyeMovement.EyeMovement(
+            x, y, time, settings.aois[level], settings.bezier_points)
+        
+        fix_data = detector.eye_movements_detector(x, y, time)
+        _, _, merged = detector.merge_fixation(fix_data)
+        feats.append(detector.AOI_fixation_ratio(merged))
+        ffd, ttff, nfbff = detector.AOI_first_fixation(merged)
+        feats += [ffd, ttff, nfbff]
+
+        sac_list = fix_data['sac']
+        _sac_counts = detector.sac_counts(sac_list)
+        _sac_duration = detector.sac_duration(sac_list)
+        _sac_path_mean, _sac_path_max, _sac_path_std = detector.sac_path_stat(sac_list)
+        feats += [_sac_counts, _sac_duration, _sac_path_mean, _sac_path_max, _sac_path_std]
+    
+    result = pd.DataFrame(
+        [gender, education, age] + feats).T
+    result.columns = feat_cols
+    
+    return result
+
 def predict(df):
     scores = cog_score(df)
     ovr_score = np.mean(scores)
@@ -340,6 +396,27 @@ def predict(df):
         moca = 30 - (100 - ovr_score)/10
     mmse = min(30, moca + 2 + 0.1*random.randint(0, 10))
     return moca, mmse
+
+def predict_v1(df):
+    dummy_demo = pd.read_excel('./models/dummy_demo.xlsx', index_col=0)
+    dummy_data = dummy_demo.align(pd.get_dummies(df, columns=["gender", "education"]), join='left', axis=1)[1]
+    dummy_data.drop(['y'], axis=1, inplace=True)
+    dummy_data.fillna(0, inplace=True)
+    import numpy as np
+    cent = np.load('./models/centroid.npy')
+    dummy_data.loc[:, 'att': 'recall_sac_path_std'] = dummy_data.loc[:, 'att': 'recall_sac_path_std'] - cent
+    import joblib
+    gbr_lower = joblib.load('./models/q-0.05-gbr-prod.joblib')
+    gbr_upper = joblib.load('./models/q-0.95-gbr-prod.joblib')
+
+    min_mmse = 30 - gbr_upper.predict(dummy_data)[0]
+    max_mmse = min(30, 30 - gbr_lower.predict(dummy_data)[0])
+    if min_mmse < 18 and max_mmse > 28:
+        max_mmse -= 3
+
+    min_moca = min_mmse - random.randint(1, 3)
+    max_moca = max_mmse - random.randint(1, 2) if min_mmse <= 24 else max_mmse
+    return min_mmse, max_mmse, min_moca, max_moca
 
 def cog_score(df) -> list:
     result = df.loc[:, cog_cat].values[0].tolist()
@@ -416,6 +493,31 @@ def eye_screen(model: EyeScreenReqeustModel, request: Request, background_tasks:
     logger.info('Eye screen results: {}'.format(results))
     return results
 
+def eye_screen_v1(model: EyeScreenReqeustModel, request: Request, background_tasks: BackgroundTasks):
+
+    auth_resp = auth_validate(model, request)
+    if auth_resp:
+        return auth_resp
+    gender = model.sex
+    age = model.age
+    education = model.education
+    url = model.url
+    save_pth = model.saveResourcesPath
+    q_ver = model.questionVersion
+    src = './assets/design-{}/'.format(q_ver)
+
+    _, sid = os.path.split(url)
+    if not os.path.exists('./log/eyescreen_log'):
+        os.mkdir('./log/eyescreen_log')
+    logger = get_logger(sid, './log/eyescreen_log')
+    logger.info('Authorization succeed.')
+
+    background_tasks.add_task(draw_eye_screen, url, save_pth, src, settings.deploy_mode)
+    logger.info('Eye screen plot submitted.')
+    results = calc_eye_screen_v1(url, gender, education, age, logger)
+    logger.info('Eye screen results: {}'.format(results))
+    return results
+
 def calc_eye_screen(url, gender, education, age, logger):
     if settings.deploy_mode == 'offline':
         with open(url) as f:
@@ -450,6 +552,50 @@ def calc_eye_screen(url, gender, education, age, logger):
         body={
             'mmse':round(mmse, 1),
             'moca':round(moca, 1),
+            'resultScores':[
+                {'level':1, 'score':round(scores[0], 1)},{'level':2, 'score':round(scores[1], 1)},{'level':3, 'score':round(scores[2], 1)},
+                {'level':4, 'score':round(scores[3], 1)},{'level':5, 'score':round(scores[4], 1)},{'level':6, 'score':round(scores[5], 1)},
+                {'level':7, 'score':round(scores[6], 1)},{'level':8, 'score':round(scores[7], 1)},{'level':9, 'score':round(scores[8], 1)},
+                {'level':10, 'score':round(scores[9], 1)}
+            ]
+        }
+    )
+    logger.info('Eye screen prediction succeed.')
+    return resp
+
+def calc_eye_screen_v1(url, gender, education, age, logger):
+    if settings.deploy_mode == 'offline':
+        with open(url) as f:
+            txt = f.read()
+    else:
+        with requests.get(url) as r:
+            if r.status_code != 200 :
+                logger.error("Cannot access url data!")
+            txt = r.text
+    df = text2DF(txt)
+    
+    try:
+        data = preprocess_feat_v1(df, gender, education, age)
+        min_mmse, max_mmse, min_moca, max_moca = predict_v1(data)
+        scores = compute_cog_score(df)
+        scores = [x*100 for x in scores]
+        logger.info('Cog score: {}\nMMSE: {}~{} MoCA: {}~{}'.format(scores, min_mmse, max_mmse, min_moca, max_moca))
+    except Exception as e:
+        logger.exception(e)
+        return GeneralResponseModel(
+            code=500,
+            # 'msg':'Error during score predicting.',
+            msg=str(e),
+            body=None
+        )
+    resp = GeneralResponseModel(
+        code=200,
+        msg="AI prediction succeed.",
+        body={
+            'minMmse':round(min_mmse, 1),
+            'maxMmse':round(max_mmse, 1),
+            'minMoca':round(min_moca, 1),
+            'maxMoca':round(max_moca, 1),
             'resultScores':[
                 {'level':1, 'score':round(scores[0], 1)},{'level':2, 'score':round(scores[1], 1)},{'level':3, 'score':round(scores[2], 1)},
                 {'level':4, 'score':round(scores[3], 1)},{'level':5, 'score':round(scores[4], 1)},{'level':6, 'score':round(scores[5], 1)},

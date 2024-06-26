@@ -189,15 +189,16 @@ def draw(id, df):
         now = datetime.datetime.now()
         year, month, day = str(now.year), str(now.month), str(now.day)
         base_key = '/'.join([settings.sd_prefix, year, month, day, str(id)])
+        offline_base_key = '/'.join([settings.sd_prefix_offline, year, month, day, str(id)])
         save_key = '/'.join([settings.url_prefix_offline, settings.sd_prefix_offline, year, month, day, str(id)])
 
         if settings.deploy_mode == 'offline':
             draw1(df, save_key)
-            key1 = base_key + '/1.jpg'
+            key1 = offline_base_key + '/1.jpg'
             draw2(df, save_key)
-            key2 = base_key + '/2.jpg'
+            key2 = offline_base_key + '/2.jpg'
             draw3(df, save_key)
-            key3 = base_key + '/3.jpg'
+            key3 = offline_base_key + '/3.jpg'
         else:
             bio1 = draw1(df)
             key1 = settings.url_prefix + _save_img2cos(bio1, client, base_key, 1)
